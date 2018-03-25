@@ -1,12 +1,11 @@
-import settings
 import pymysql.cursors
 
 # fetch local .env variables
-db_host = str(settings.DB_HOST)
-db_port = int(settings.DB_PORT)
-db_user = str(settings.DB_USER)
-db_pass = str(settings.DB_PASS)
-db_name = str(settings.DB_NAME)
+db_host = str(os.getenv('DB_HOST'))
+db_port = int(os.getenv('DB_PORT'))
+db_user = str(os.getenv('DB_USER'))
+db_pass = str(os.getenv('DB_PASS'))
+db_name = str(os.getenv('DB_NAME'))
 
 # check if connection to database is working
 def checkDatabaseConnection():
