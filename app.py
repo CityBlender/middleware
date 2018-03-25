@@ -1,17 +1,9 @@
-from flask import Flask
-from datetime import datetime
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
-
-    return """
-    <h1>Hello Munger</h1>
-    <p>It is currently {time}.</p>
-
-    <img src="https://media.giphy.com/media/4XodyqzlYFby0/giphy.gif">
-    """.format(time=the_time)
+  return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
