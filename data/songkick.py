@@ -84,7 +84,6 @@ def getGigs(metro_area_code, min_date, max_date):
 
     all_events.append(event_object)
 
-  print(all_events)
   return all_events
 
 
