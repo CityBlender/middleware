@@ -1,6 +1,5 @@
 import json
 import os
-import pandas as pd
 import random
 import requests
 
@@ -26,33 +25,12 @@ def getGigs(metro_area_code, min_date, max_date):
   data = json.loads(response.text)
   results = data['resultsPage']['results']['event']
 
+  all_events = []
+
   for event in results:
-
-    # event meta
-    event_id = event['id']
-    event_type = event['type']
-    event_url = event['uri']
-    event_popularity = event['popularity']
-    event_name = event['displayName']
-
-    # time
-    start_datetime = event['start']['datetime']
-    start_date = event['start']['date']
-    start_time = event['start']['time']
-
-    # generic location
-    location_lng = event['location']['lng']
-    location_lat = event['location']['lat']
-
-    # venue info
-    venue_id = event['venue']['id']
-    venue_name = event['venue']['displayName']
-    venue_lng = event['venue']['lng']
-    venue_lat = event['venue']['lat']
-
     artist_list = []
 
-    # artist(s)
+    # create artist list
     for artist in event['performance']:
       artist_name = artist['displayName']
       artist_billing_index = artist['billingIndex']
@@ -76,7 +54,38 @@ def getGigs(metro_area_code, min_date, max_date):
 
       artist_list.append(artist_object)
 
-    # ger everything ready for database query
+    # put everything together into an object
+    event_object = {
+      # event meta
+      'event_id': event['id'],
+      'event_type': event['type'],
+      'event_url': event['uri'],
+      'event_popularity': event['popularity'],
+      'event_name': event['displayName'],
+
+      # time
+      'start_datetime': event['start']['datetime'],
+      'start_date': event['start']['date'],
+      'start_time': event['start']['time'],
+
+      # generic location
+      'location_lng': event['location']['lng'],
+      'location_lat': event['location']['lat'],
+
+      # venue info
+      'venue_id': event['venue']['id'],
+      'venue_name': event['venue']['displayName'],
+      'venue_lng': event['venue']['lng'],
+      'venue_lat': event['venue']['lat'],
+
+      # artist
+      'artists': artist_list
+    }
+
+    all_events.append(event_object)
+
+  print(all_events)
+  return all_events
 
 
 
