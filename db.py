@@ -2,20 +2,20 @@ import settings
 import pymysql.cursors
 
 # fetch local .env variables
-dbHost = str(settings.DB_HOST)
-dbPort = int(settings.DB_PORT)
-dbUser = str(settings.DB_USER)
-dbPass = str(settings.DB_PASS)
-dbName = str(settings.DB_NAME)
+db_host = str(settings.DB_HOST)
+db_port = int(settings.DB_PORT)
+db_user = str(settings.DB_USER)
+db_pass = str(settings.DB_PASS)
+db_name = str(settings.DB_NAME)
 
 # check if connection to database is working
 def checkDatabaseConnection():
   try:
     connection = pymysql.connect(
-      host=dbHost,
-      user=dbUser,
-      password=dbPass,
-      db=dbName,
+      host=db_host,
+      user=db_user,
+      password=db_pass,
+      db=db_name,
       cursorclass=pymysql.cursors.DictCursor
     )
     print('Successfuly connected to the database  ✅')

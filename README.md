@@ -2,7 +2,7 @@
 
 ## Setting up
 
-This project uses ``pipenv`` to keep the local Python environment consistent accross different machines and development environments.
+This project uses ``pipenv`` to keep the local Python environment consistent across different machines and development environments.
 
 Please refer to [the installation guide](https://docs.pipenv.org/install/) to install it on your device and get an idea how it works. You can also check out [the instruction here](https://robots.thoughtbot.com/how-to-manage-your-python-projects-with-pipenv).
 
@@ -12,7 +12,7 @@ Please refer to [the installation guide](https://docs.pipenv.org/install/) to in
 
 ### Set up development environment
 
-To install the neccessary dependencies run ``pipenv install``
+To install the necessary dependencies run ``pipenv install``
 
 To use the project's virtualenv run ``pipenv shell``
 
@@ -26,8 +26,11 @@ Make sure you to keep an eye on ``Pipfile`` changes and update your dependencies
 
 
 
+## Code guidelines
 
+For variables use all lowercase underscore notation like so ``your_variable_name``.
 
+For defining functions use camelCase with no spaces like so ``yourCustomFunction()``.
 
 
 ## Contributors
