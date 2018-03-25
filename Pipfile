@@ -11,6 +11,7 @@ flask = "*"
 datetime = "*"
 gunicorn = "*"
 requests = "*"
+pandas = "*"
 
 [dev-packages]
 

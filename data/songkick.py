@@ -1,7 +1,13 @@
+import datetime
 import json
 import os
+import pandas as pd
 import random
 import requests
+
+# get today's date
+today = datetime.datetime.now().strftime('%Y-%m-%d') # YYYY-MM-DD
+
 
 # SongKick API keys
 songkick_keys = ([
@@ -16,10 +22,10 @@ def getSongkickKey():
   return key
 
 # get gigs in given metropolitan area
-def getGigs(metro_area_code, min_date, max_date):
+def getGigs(metro_area_code, min_date = today, max_date = today, results = 50, page = 1):
   area = metro_area_code
   key = getSongkickKey()
-  url = 'http://api.songkick.com/api/3.0/metro_areas/'+area+'/calendar.json?min_date='+min_date+'&max_date='+max_date+'&apikey='+key
+  url = 'http://api.songkick.com/api/3.0/metro_areas/'+area+'/calendar.json?min_date='+min_date+'&max_date='+max_date+'&per_page='+str(results)+'&page='+str(page)+'&apikey='+key
 
   response = requests.get(url)
   data = json.loads(response.text)
@@ -84,6 +90,9 @@ def getGigs(metro_area_code, min_date, max_date):
 
     all_events.append(event_object)
 
+  # return all events
+
+  print(all_events)
   return all_events
 
 
