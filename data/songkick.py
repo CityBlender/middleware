@@ -9,9 +9,6 @@ songkick_keys = ([
   os.getenv('SK_API_KEY_2')
 ])
 
-# SongKick metropolitan area codes
-metro_london = '24426'
-
 # get random SongKick API key function
 def getSongkickKey():
   key = random.choice (songkick_keys)
@@ -19,14 +16,23 @@ def getSongkickKey():
   return key
 
 # get gigs in given metropolitan area
-def getGigs(metro_area_code):
+def getGigs(metro_area_code, min_date, max_date):
   area = metro_area_code
   key = getSongkickKey()
-  url = 'http://api.songkick.com/api/3.0/metro_areas/'+area+'/calendar.json?apikey='+key
+  url = 'http://api.songkick.com/api/3.0/metro_areas/'+area+'/calendar.json?min_date='+min_date+'&max_date='+max_date+'&apikey='+key
+
+  print(url)
 
   response = requests.get(url)
   data = json.loads(response.text)
-  results = data['resultsPage']['results']
-  print(json.dumps(results, indent=4))
+  results = data['resultsPage']['results']['event']
+  for event in results:
+    event_id = event['id']
+    event_type = event['type']
+    event_url = event['uri']
+    popularity = event['popularity']
+    name = event['displayName']
+
+    print(event['displayName'])
 
 
