@@ -9,6 +9,7 @@ pylint = "*"
 pymysql = "*"
 flask = "*"
 datetime = "*"
+gunicorn = "*"
 
 [dev-packages]
 
