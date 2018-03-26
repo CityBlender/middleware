@@ -12,6 +12,7 @@ datetime = "*"
 gunicorn = "*"
 requests = "*"
 pandas = "*"
+dropbox = "*"
 
 [dev-packages]
 

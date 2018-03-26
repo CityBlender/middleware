@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "036d16cc051d5996114c32eab74a172192639c6782acfcd8256e7882d5a2fcbc"
+            "sha256": "b7b7312e4067d74c36eeaf3b54a2b306879c6684766fc805b03c4c967edca96b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -51,6 +51,15 @@
             ],
             "index": "pypi",
             "version": "==4.2"
+        },
+        "dropbox": {
+            "hashes": [
+                "sha256:019f1529631d335f2b57ffd65a4545406bd3d139d0a9611cb6ca8c66c4ae7309",
+                "sha256:2ac952428ec9351bb061c499610c5569aa372770fbaeb47b4c31656e3fabf825",
+                "sha256:60f8846f4249a74c4dd8d5d960d9ca88ac42ddac5bdf150c7505eea7d0e23557"
+            ],
+            "index": "pypi",
+            "version": "==8.7.1"
         },
         "flask": {
             "hashes": [
