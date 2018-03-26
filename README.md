@@ -38,3 +38,4 @@ For defining functions use camelCase with no spaces like so ``yourCustomFunction
 - Ilja Panic
 - Alfie Long
 - Soma Suzuki
+- Jony Cohen
