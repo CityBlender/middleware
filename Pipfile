@@ -4,9 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-sqlalchemy = "*"
+python-dotenv = "*"
+pylint = "*"
+pymysql = "*"
+flask = "*"
+datetime = "*"
+gunicorn = "*"
+requests = "*"
+pandas = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.6.4"
