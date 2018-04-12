@@ -67,7 +67,7 @@ def dumpGigs(area, metro_area_code, folder):
 
   # get total number of entries from the call
   total_entries = data['resultsPage']['totalEntries']
-  print(str(total_entries) + ' entries for ' + area + ' on ' + min_date)
+  print('\033[92m' + str(total_entries) + '\033[0m' + ' entries for ' + area + ' on ' + min_date)
 
   while total_entries > results :
     page = page + 1 # increase page count
