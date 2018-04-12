@@ -1,12 +1,11 @@
-import datetime
 import json
-import os
+import os, errno
 import pandas as pd
 import random
 import requests
 
-# get today's date
-today = datetime.datetime.now().strftime('%Y-%m-%d') # YYYY-MM-DD
+import settings
+import data.dataHelper as dataHelper
 
 
 # SongKick API keys
@@ -21,14 +20,67 @@ def getSongkickKey():
   print('using Songkick key: ' + key)
   return key
 
-# get gigs in given metropolitan area
-def getGigs(metro_area_code, min_date = today, max_date = today, results = 50, page = 1):
+
+#
+# getGigs() - generic function for returning raw SongKick JSON based on input parameters
+#
+
+def getGigs(metro_area_code, min_date = settings.today, max_date = settings.today, results = 50, page = 1):
+  # configure API call
   area = metro_area_code
   key = getSongkickKey()
   url = 'http://api.songkick.com/api/3.0/metro_areas/'+area+'/calendar.json?min_date='+min_date+'&max_date='+max_date+'&per_page='+str(results)+'&page='+str(page)+'&apikey='+key
 
+  # get API response
   response = requests.get(url)
+
+  # parse respons as JSON
   data = json.loads(response.text)
+
+  # return JSON
+  return data
+
+
+#
+# dumpGigs() - function for dumping raw SongKick JSON into Dropbox directory
+#
+
+def dumpGigs(metro_area_code, min_date=settings.today, max_date=settings.today):
+  results = 50 # get the max number by default
+  page = 1 # get first page
+
+  # get first page
+  data = getGigs(metro_area_code, min_date, max_date, results, page)
+
+  # define filename
+  filename = metro_area_code + '__' + min_date + '__' + max_date + '__' + str(page) + '.json'
+
+  # dump first page
+  dataHelper.dumpJson(filename, data, './temp/')
+
+  # get total number of entries from the call
+  total_entries = data['resultsPage']['totalEntries']
+  print('There are total of ' + str(total_entries) + ' entries matching your call')
+
+  while total_entries > results :
+    page = page + 1 # increase page count
+    total_entries = total_entries - results # reduce total by
+    filename = metro_area_code + '__' + min_date + '__' + max_date + '__' + str(page) + '.json' # update filename to reflect new page count
+    data = getGigs(metro_area_code, min_date, max_date, results, page) # fetch additional page
+
+    # dump additional page
+    dataHelper.dumpJson(filename, data, './temp/')
+
+  # finally get rid of the temp folder
+  # dataHelper.removeDirectory('./temp/')
+
+
+
+#
+# fetchGigs() - fetches Gigs
+#
+
+def fetchGigs(data):
   results = data['resultsPage']['results']['event']
 
   all_events = []
@@ -92,6 +144,3 @@ def getGigs(metro_area_code, min_date = today, max_date = today, results = 50, p
 
   # return all events
   return all_events
-
-
-
