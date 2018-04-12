@@ -1,8 +1,6 @@
 import settings as settings
 import data.songkick as sk
 
-
-
 # run dump functions
 
 for city in settings.metro_uk:
@@ -20,10 +18,18 @@ for city in settings.metro_americas:
   code = city[1]
   sk.dumpGigs(area, code, 'americas/')
 
+for city in settings.metro_asia:
+  area = city[0]
+  code = city[0]
+  sk.dumpGigs(area, code, 'asia/')
+
 for city in settings.metro_oceania:
   area = city[0]
   code = city[1]
   sk.dumpGigs(area, code, 'oceania/')
 
 
-
+# for city in settings.metro_test:
+#   area = city[0]
+#   code = city[1]
+#   sk.dumpGigs(area, code, 'test/')

@@ -44,11 +44,9 @@ def getGigs(metro_area_code, min_date = settings.today, max_date = settings.toda
 # dumpGigs() - function for dumping raw SongKick JSON into Dropbox directory
 #
 
-def dumpGigs(area, metro_area_code, folder):
+def dumpGigs(area, metro_area_code, folder, min_date = settings.tomorrow, max_date = settings.tomorrow):
   results = 50 # get the max number by default
   page = 1 # get first page
-  min_date=settings.today
-  max_date=settings.today
   dump_dir = './temp/songkick-json-dumps/'
   dropbox_dir = '/data/songkick-json-dumps/' + folder
 

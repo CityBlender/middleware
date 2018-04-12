@@ -8,8 +8,17 @@ from pathlib import Path
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path, verbose=True)
 
-# get today's date
-today = datetime.datetime.now().strftime('%Y-%m-%d') # YYYY-MM-DD
+# get today's and tomorrows date in YYYY-MM-DD
+date_format = '%Y-%m-%d'
+today = datetime.datetime.now().strftime(date_format)
+tomorrow = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime(date_format)
+today_plus_2 = (datetime.datetime.today() + datetime.timedelta(days=2)).strftime(date_format)
+today_plus_3 = (datetime.datetime.today() + datetime.timedelta(days=3)).strftime(date_format)
+today_plus_4 = (datetime.datetime.today() + datetime.timedelta(days=4)).strftime(date_format)
+today_plus_5 = (datetime.datetime.today() + datetime.timedelta(days=5)).strftime(date_format)
+today_plus_6 = (datetime.datetime.today() + datetime.timedelta(days=6)).strftime(date_format)
+today_plus_7 = (datetime.datetime.today() + datetime.timedelta(days=7)).strftime(date_format)
+
 
 # SongKick metropolitan area codes
 metro_uk = [
@@ -44,9 +53,16 @@ metro_americas = [
   ['Toronto', '27396']
 ]
 
+metro_asia = [
+  ['Tokyo', '30717']
+]
+
 metro_oceania = [
   ['Brisbane', '26778'],
   ['Melbourne', '26790'],
   ['Sydney', '26794']
 ]
 
+metro_test = [
+  ['London', '24426']
+]
