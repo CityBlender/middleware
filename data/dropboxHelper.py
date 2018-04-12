@@ -4,25 +4,25 @@ import os
 
 dropbox_token = str(os.getenv('DROPBOX_TOKEN'))
 
-def dumpToDrobpox():
-  dbx = dropbox.Dropbox(dropbox_token)
 
-  folder = pathlib.Path("data/")    # located in this folder
-  filename = "test.txt"         # file name
-  filepath = folder / filename  # path object, defining the file
+def uploadToDrobpox(filename, input_dir, output_dir):
+
+  folder = pathlib.Path(input_dir)    # located in this folder
+  filename = filename         # file name
+  file_path = folder / filename  # path object, defining the file
 
   # target location in Dropbox
-  target = "/Documents/UCL/Fuinki Blender/data/songkick-json-dumps/"              # the target folder
-  targetfile = target + filename   # the target path and file name
+  target = "/Documents/UCL/Fuinki Blender"+output_dir # the target folder
+  target_file = target + filename   # the target path and file name
 
   # Create a dropbox object using an API v2 key
-  d = dropbox.Dropbox(dropbox_token)
+  dbx = dropbox.Dropbox(dropbox_token)
 
   # open the file and upload it
-  with filepath.open("rb") as f:
+  with file_path.open("rb") as f:
     # upload gives you metadata about the file
     # we want to overwite any previous version of the file
-    meta = d.files_upload(f.read(), targetfile, mode=dropbox.files.WriteMode("overwrite"))
+    meta = dbx.files_upload(f.read(), target_file, mode=dropbox.files.WriteMode("overwrite"))
 
 
   # rootdir = '/tmp/test'

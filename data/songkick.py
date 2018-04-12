@@ -6,7 +6,7 @@ import requests
 
 import settings
 import data.dataHelper as dataHelper
-
+import data.dropboxHelper as dropboxHelper
 
 # SongKick API keys
 songkick_keys = ([
@@ -48,6 +48,8 @@ def getGigs(metro_area_code, min_date = settings.today, max_date = settings.toda
 def dumpGigs(metro_area_code, min_date=settings.today, max_date=settings.today):
   results = 50 # get the max number by default
   page = 1 # get first page
+  dump_dir = './temp/songkick-json-dumps/'
+  dropbox_dir = '/data/songkick-json-dumps/'
 
   # get first page
   data = getGigs(metro_area_code, min_date, max_date, results, page)
@@ -56,7 +58,10 @@ def dumpGigs(metro_area_code, min_date=settings.today, max_date=settings.today):
   filename = metro_area_code + '__' + min_date + '__' + max_date + '__' + str(page) + '.json'
 
   # dump first page
-  dataHelper.dumpJson(filename, data, './temp/')
+  dataHelper.dumpJson(filename, data, dump_dir)
+
+  # save to Dropbox
+  dropboxHelper.uploadToDrobpox(filename, dump_dir, dropbox_dir)
 
   # get total number of entries from the call
   total_entries = data['resultsPage']['totalEntries']
@@ -69,10 +74,13 @@ def dumpGigs(metro_area_code, min_date=settings.today, max_date=settings.today):
     data = getGigs(metro_area_code, min_date, max_date, results, page) # fetch additional page
 
     # dump additional page
-    dataHelper.dumpJson(filename, data, './temp/')
+    dataHelper.dumpJson(filename, data, dump_dir)
+
+    # save additional page to Dropbox
+    dropboxHelper.uploadToDrobpox(filename, dump_dir, dropbox_dir)
 
   # finally get rid of the temp folder
-  # dataHelper.removeDirectory('./temp/')
+  # dataHelper.removeDirectory(dump_dir)
 
 
 
