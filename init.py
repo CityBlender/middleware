@@ -5,9 +5,7 @@ import data.dropboxHelper as dropbox
 # SongKick metropolitan area codes
 metro_london = '24426'
 
-# sk.getGigs(metro_london, results=1)
+# run dump functions
 sk.dumpGigs(metro_london)
 
-
-# dropbox.dumpToDrobpox()
 
