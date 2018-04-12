@@ -17,7 +17,6 @@ songkick_keys = ([
 # get random SongKick API key function
 def getSongkickKey():
   key = random.choice (songkick_keys)
-  print('using Songkick key: ' + key)
   return key
 
 
@@ -45,32 +44,35 @@ def getGigs(metro_area_code, min_date = settings.today, max_date = settings.toda
 # dumpGigs() - function for dumping raw SongKick JSON into Dropbox directory
 #
 
-def dumpGigs(metro_area_code, min_date=settings.today, max_date=settings.today):
+def dumpGigs(area, metro_area_code, folder):
   results = 50 # get the max number by default
   page = 1 # get first page
+  min_date=settings.today
+  max_date=settings.today
   dump_dir = './temp/songkick-json-dumps/'
-  dropbox_dir = '/data/songkick-json-dumps/'
+  dropbox_dir = '/data/songkick-json-dumps/' + folder
 
   # get first page
   data = getGigs(metro_area_code, min_date, max_date, results, page)
 
   # define filename
-  filename = metro_area_code + '__' + min_date + '__' + max_date + '__' + str(page) + '.json'
+  filename_root = area + '_(' + min_date + ')_page-'
+  filename_init = filename_root  + str(page) + '.json'
 
   # dump first page
-  dataHelper.dumpJson(filename, data, dump_dir)
+  dataHelper.dumpJson(filename_init, data, dump_dir)
 
   # save to Dropbox
-  dropboxHelper.uploadToDrobpox(filename, dump_dir, dropbox_dir)
+  dropboxHelper.uploadToDrobpox(filename_init, dump_dir, dropbox_dir)
 
   # get total number of entries from the call
   total_entries = data['resultsPage']['totalEntries']
-  print('There are total of ' + str(total_entries) + ' entries matching your call')
+  print(str(total_entries) + ' entries for ' + area + ' on ' + min_date)
 
   while total_entries > results :
     page = page + 1 # increase page count
     total_entries = total_entries - results # reduce total by
-    filename = metro_area_code + '__' + min_date + '__' + max_date + '__' + str(page) + '.json' # update filename to reflect new page count
+    filename = filename_root + str(page) + '.json' # update filename to reflect new page count
     data = getGigs(metro_area_code, min_date, max_date, results, page) # fetch additional page
 
     # dump additional page
