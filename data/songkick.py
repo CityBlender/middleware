@@ -5,8 +5,8 @@ import random
 import requests
 
 import settings
-import data.dataHelper as dataHelper
-import data.dropboxHelper as dropboxHelper
+import utils.dataHelper as dataHelper
+import utils.dropboxHelper as dropboxHelper
 
 # SongKick API keys
 songkick_keys = ([
