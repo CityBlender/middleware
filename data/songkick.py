@@ -152,3 +152,42 @@ def fetchGigs(data):
 
   # return all events
   return all_events
+
+
+
+# functions put together
+def dumpUk():
+  for city in settings.metro_uk:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'uk/')
+
+def dumpEur():
+  for city in settings.metro_eur:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'eur/')
+
+def dumpAmericas():
+  for city in settings.metro_americas:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'americas/')
+
+def dumpAsia():
+  for city in settings.metro_asia:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'asia/')
+
+def dumpOceania():
+  for city in settings.metro_oceania:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'oceania/')
+
+def dumpTest():
+  for city in settings.metro_test:
+    area = city[0]
+    code = city[1]
+    dumpGigs(area, code, 'test/')
