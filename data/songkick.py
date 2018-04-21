@@ -165,7 +165,7 @@ def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.to
   # get first batch of events
   data = getGigs(metro_area_code, min_date, max_date, results, page)
 
-  # append first batch
+  # add first list of events dicitionaries
   events_list = getEventsObject(data)
 
   # find out the total number of entries for given call
@@ -177,7 +177,8 @@ def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.to
 
     data = getGigs(metro_area_code, min_date, max_date, results, page) # fetch additional page
 
-    # append additional page
+    # add additional page of events dictionaries
+    # - we are concatenating the lists instead of appending them so we only get a single list of dictionaries
     events_list = events_list + getEventsObject(data)
 
   # return object with all events for given dates

@@ -1,27 +1,24 @@
-import pymysql.cursors
+import os, errno
+from pymongo import MongoClient
+from pprint import pprint
 
-# fetch local .env variables
-db_host = str(os.getenv('DB_HOST'))
-db_port = int(os.getenv('DB_PORT'))
-db_user = str(os.getenv('DB_USER'))
-db_pass = str(os.getenv('DB_PASS'))
-db_name = str(os.getenv('DB_NAME'))
+import settings
 
-# check if connection to database is working
-def checkDatabaseConnection():
-  try:
-    connection = pymysql.connect(
-      host=db_host,
-      user=db_user,
-      password=db_pass,
-      db=db_name,
-      cursorclass=pymysql.cursors.DictCursor
-    )
-    print('Successfuly connected to the database  ✅')
-    connection.close()
-    return True
-  except:
-    print('Failed to connect to the database  🛑')
-    return False
+# test connection to MongoDB
+db_test_uri = os.getenv('DB_TEST')
+db_test_client = MongoClient(str(db_test_uri))
+db_test = db_test_client.test
 
-checkDatabaseConnection()
+def dbStatus():
+  server_status = db_test.command("serverStatus")
+  pprint(server_status)
+
+# events
+db_uri = os.getenv('DB')
+db_client = MongoClient(str(db_uri))
+db = db_client.master
+db_events_collection = db['events']
+db_artist_collection = db['artists']
+
+def dbInsertEvents(events):
+  db_events_collection.insert(events)

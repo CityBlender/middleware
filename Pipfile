@@ -13,6 +13,9 @@ gunicorn = "*"
 requests = "*"
 pandas = "*"
 dropbox = "*"
+pymongo = "*"
+pprint = "*"
+dnspython = "*"
 
 [dev-packages]
 
