@@ -8,6 +8,13 @@ from pathlib import Path
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path, verbose=True)
 
+def isProduction():
+  environment = os.getenv('ENV')
+  if environment == 'production':
+    return True
+  else:
+    return False
+
 # get today's and tomorrows date in YYYY-MM-DD
 date_format = '%Y-%m-%d'
 today = datetime.datetime.now().strftime(date_format)

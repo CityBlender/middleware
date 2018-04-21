@@ -7,7 +7,12 @@ import settings
 # configure database connection
 db_uri = os.getenv('DB')
 db_client = MongoClient(str(db_uri))
-db = db_client.test
+
+if settings.isProduction():
+  db = db_client.master
+else:
+  db = db_client.test
+
 db_events = db['events']
 db_artist = db['artists']
 
