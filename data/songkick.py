@@ -1,3 +1,4 @@
+import dateutil
 import json
 import os, errno
 import pandas as pd
@@ -118,6 +119,13 @@ def getEventsObject(data):
 
       artist_list.append(artist_object)
 
+    # convert dates into correct format for MongoDB
+    event_datetime_string = event['start']['datetime']
+    if event_datetime_string is not None:
+      event_datetime = dateutil.parser.parse(event_datetime_string)
+    else:
+      event_datetime = event_datetime_string
+
     # put everything together into an object
     event_object = {
       # event meta
@@ -128,7 +136,8 @@ def getEventsObject(data):
       'event_name': event['displayName'],
 
       # time
-      'start_datetime': event['start']['datetime'],
+      'start_datetime_source': event['start']['datetime'],
+      'start_datetime': event_datetime,
       'start_date': event['start']['date'],
       'start_time': event['start']['time'],
 

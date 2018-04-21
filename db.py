@@ -8,6 +8,7 @@ import settings
 db_test_uri = os.getenv('DB_TEST')
 db_test_client = MongoClient(str(db_test_uri))
 db_test = db_test_client.test
+db_test_events = db_test['events']
 
 def dbStatus():
   server_status = db_test.command("serverStatus")
@@ -17,8 +18,11 @@ def dbStatus():
 db_uri = os.getenv('DB')
 db_client = MongoClient(str(db_uri))
 db = db_client.master
-db_events_collection = db['events']
-db_artist_collection = db['artists']
+db_events = db['events']
+db_artist = db['artists']
 
 def dbInsertEvents(events):
-  db_events_collection.insert(events)
+  db_events.insert(events)
+
+def dbInsertTestEvents(events):
+  db_test_events.insert(events)
