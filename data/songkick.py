@@ -80,20 +80,18 @@ def dumpGigs(area, metro_area_code, folder, min_date = settings.tomorrow, max_da
     dropboxHelper.uploadToDrobpox(filename, dump_dir, dropbox_dir)
 
   # finally get rid of the temp folder
-  # dataHelper.removeDirectory(dump_dir)
+  dataHelper.removeDirectory(dump_dir)
 
 
 
 #
-# fetchGigs() - fetches Gigs
+# getEventsObject()
 #
-
-def fetchGigs(data):
-  results = data['resultsPage']['results']['event']
-
+def getEventsObject(data):
+  events = data['resultsPage']['results']['event']
   all_events = []
 
-  for event in results:
+  for event in events:
     artist_list = []
 
     # create artist list
@@ -152,6 +150,39 @@ def fetchGigs(data):
 
   # return all events
   return all_events
+
+
+
+#
+# fetchGigs() - fetches Gigs
+#
+
+def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.today):
+  results = 50 # get the max number by default
+  page = 1 # get first page
+  events_list = [] # create empty list
+
+  # get first batch of events
+  data = getGigs(metro_area_code, min_date, max_date, results, page)
+
+  # append first batch
+  events_list = getEventsObject(data)
+
+  # find out the total number of entries for given call
+  total_entries = data['resultsPage']['totalEntries']
+
+  while total_entries > results :
+    page = page + 1 # increase page count
+    total_entries = total_entries - results # reduce total
+
+    data = getGigs(metro_area_code, min_date, max_date, results, page) # fetch additional page
+
+    # append additional page
+    events_list = events_list + getEventsObject(data)
+
+  # return object with all events for given dates
+  return events_list
+
 
 
 
