@@ -5,12 +5,13 @@ from pprint import pprint
 import settings
 
 # configure database connection
-db_uri = os.getenv('DB')
-db_client = MongoClient(str(db_uri))
-
-if settings.isProduction():
+if settings.checkEnvironment() == 'production':
+  db_uri = os.getenv('DB')
+  db_client = MongoClient(str(db_uri))
   db = db_client.master
 else:
+  db_uri = os.getenv('DB_TEST')
+  db_client = MongoClient(str(db_uri))
   db = db_client.test
 
 db_events = db['events']
@@ -31,7 +32,7 @@ def eventExists(new_event_id):
   else:
     return False
 
-
+# insert events into database
 def dbInsertEvents(events):
   for event in events:
     event_id = event['event_id']
