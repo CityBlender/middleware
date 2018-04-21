@@ -4,25 +4,34 @@ from pprint import pprint
 
 import settings
 
-# test connection to MongoDB
-db_test_uri = os.getenv('DB_TEST')
-db_test_client = MongoClient(str(db_test_uri))
-db_test = db_test_client.test
-db_test_events = db_test['events']
-
-def dbStatus():
-  server_status = db_test.command("serverStatus")
-  pprint(server_status)
-
-# events
+# configure database connection
 db_uri = os.getenv('DB')
 db_client = MongoClient(str(db_uri))
-db = db_client.master
+db = db_client.test
 db_events = db['events']
 db_artist = db['artists']
 
-def dbInsertEvents(events):
-  db_events.insert(events)
+# dbStatus()
+# - tests connection to MongoDB
+def dbStatus():
+  server_status = db.command("serverStatus")
+  pprint(server_status)
 
-def dbInsertTestEvents(events):
-  db_test_events.insert(events)
+
+
+# check if event exists
+def eventExists(new_event_id):
+  if db_events.find({'event_id': new_event_id}).count() > 0:
+    return True
+  else:
+    return False
+
+
+def dbInsertEvents(events):
+  for event in events:
+    event_id = event['event_id']
+    if eventExists(event_id):
+      pass
+    else:
+      db_events.insert(event)
+

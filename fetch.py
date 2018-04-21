@@ -6,4 +6,4 @@ import data.songkick as sk
 london_events = sk.fetchGigs(metro_area_code='24426')
 
 # insert into database
-db.dbInsertTestEvents(london_events)
+db.dbInsertEvents(london_events)
