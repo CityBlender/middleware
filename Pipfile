@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 python-dotenv = "*"
 pylint = "*"
-pymysql = "*"
 flask = "*"
 datetime = "*"
 gunicorn = "*"
