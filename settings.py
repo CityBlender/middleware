@@ -5,8 +5,12 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # load .env variables
-# env_path = Path('.') / '.env'
-load_dotenv(verbose=True)
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+dotenv_file = os.path.join(base_dir, '.env')
+if os.path.isfile(dotenv_file):
+    load_dotenv(dotenv_file, verbose=True)
+
+
 
 def checkEnvironment():
   environment = os.getenv('ENV')
