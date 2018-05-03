@@ -24,7 +24,6 @@ def dbStatus():
   pprint(server_status)
 
 
-
 # check if event exists
 def eventExists(new_event_id):
   if db_events.find({'event_id': new_event_id}).count() > 0:
