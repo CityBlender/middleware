@@ -8,11 +8,11 @@ import settings
 if settings.checkEnvironment() == 'production':
   db_uri = os.getenv('DB')
   db_client = MongoClient(str(db_uri))
-  db = db_client.master
+  db = db_client.fuinki
 else:
   db_uri = os.getenv('DB_TEST')
   db_client = MongoClient(str(db_uri))
-  db = db_client.test
+  db = db_client.fuinki
 
 db_events = db['events']
 db_artist = db['artists']
