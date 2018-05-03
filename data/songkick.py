@@ -12,7 +12,8 @@ import utils.dropboxHelper as dropboxHelper
 # SongKick API keys
 songkick_keys = ([
   os.getenv('SK_API_KEY_1'),
-  os.getenv('SK_API_KEY_2')
+  os.getenv('SK_API_KEY_2'),
+  os.getenv('SK_API_KEY_3')
 ])
 
 # get random SongKick API key function
