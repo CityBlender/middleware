@@ -8,35 +8,31 @@ import settings
 if settings.checkEnvironment() == 'production':
   db_uri = os.getenv('DB')
   db_client = MongoClient(str(db_uri))
-  db = db_client.fuinki
 else:
   db_uri = os.getenv('DB_TEST')
   db_client = MongoClient(str(db_uri))
-  db = db_client.fuinki
 
-db_events = db['events']
-db_artist = db['artists']
 
 # dbStatus()
 # - tests connection to MongoDB
 def dbStatus():
-  server_status = db.command("serverStatus")
+  server_status = db_london.command("serverStatus")
   pprint(server_status)
 
 
 # check if event exists
-def eventExists(new_event_id):
-  if db_events.find({'event_id': new_event_id}).count() > 0:
+def eventExists(new_event_id, db_collection):
+  if db_collection.find({'event_id': new_event_id}).count() > 0:
     return True
   else:
     return False
 
 # insert events into database
-def dbInsertEvents(events):
+def dbInsertEvents(events, db_collection):
   for event in events:
     event_id = event['event_id']
-    if eventExists(event_id):
+    if eventExists(event_id, db_collection):
       pass
     else:
-      db_events.insert(event)
+      db_collection.insert(event)
 
