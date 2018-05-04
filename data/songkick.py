@@ -146,12 +146,20 @@ def getEventsObject(data):
       # generic location
       'location_lng': event['location']['lng'],
       'location_lat': event['location']['lat'],
+      'location': {
+        'x': event['location']['lng'],
+        'y': event['location']['lat']
+      },
 
       # venue info
       'venue_id': event['venue']['id'],
       'venue_name': event['venue']['displayName'],
       'venue_lng': event['venue']['lng'],
       'venue_lat': event['venue']['lat'],
+      'venue_location': {
+        'x': event['venue']['lng'],
+        'y': event['venue']['lat']
+      },
 
       # artist
       'artists': artist_list
