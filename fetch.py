@@ -1,6 +1,7 @@
 import settings as settings
 import utils.db as db
 import data.songkick as sk
+import data.lastfm as last
 
 #  London metropolitan area code
 london_area = '24426'
@@ -14,4 +15,8 @@ db_london_events = db_london['events']
 db_london_artist = db_london['artists']
 
 # insert into database
-db.dbInsertEvents(london_area, db_london_events)
+# db.dbInsertEvents(london_area, db_london_events)
+
+# last.getLastById('b6b8a637-e4f1-4d30-b400-2116e9182630')
+
+last.dumpArtist('b6b8a637-e4f1-4d30-b400-2116e9182630')
