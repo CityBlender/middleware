@@ -201,6 +201,8 @@ def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.to
     events_list = events_list + getEventsObject(data)
 
   # return object with all events for given dates
+  print('\033[92m' + str(len(events_list)) + '\033[0m' + ' events fetched for ' + metro_area_code + ' on ' + min_date)
+
   return events_list
 
 
