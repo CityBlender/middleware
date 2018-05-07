@@ -1,5 +1,5 @@
 import settings as settings
-import db as db
+import utils.db as db
 import data.songkick as sk
 
 #  London metropolitan area code

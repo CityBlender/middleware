@@ -132,33 +132,31 @@ def getEventsObject(data):
     event_object = {
       # event meta
       'event_id': event['id'],
+      'event_name': event['displayName'],
       'event_type': event['type'],
       'event_url': event['uri'],
       'event_popularity': event['popularity'],
-      'event_name': event['displayName'],
 
       # time
-      'start_datetime_source': event['start']['datetime'],
-      'start_datetime': event_datetime,
-      'start_date': event['start']['date'],
-      'start_time': event['start']['time'],
+      'date': event['start']['date'],
+      'time': event['start']['time'],
+      'datetime': event_datetime,
+      'datetime_source': event['start']['datetime'],
 
-      # generic location
-      'location_lng': event['location']['lng'],
-      'location_lat': event['location']['lat'],
+      # location
       'location': {
         'x': event['location']['lng'],
         'y': event['location']['lat']
       },
 
       # venue info
-      'venue_id': event['venue']['id'],
-      'venue_name': event['venue']['displayName'],
-      'venue_lng': event['venue']['lng'],
-      'venue_lat': event['venue']['lat'],
-      'venue_location': {
-        'x': event['venue']['lng'],
-        'y': event['venue']['lat']
+      'venue': {
+        'id': event['venue']['id'],
+        'name': event['venue']['displayName'],
+        'location': {
+          'x': event['venue']['lng'],
+          'y': event['venue']['lat']
+        }
       },
 
       # artist

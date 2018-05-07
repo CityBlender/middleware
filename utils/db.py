@@ -3,7 +3,6 @@ from pymongo import MongoClient
 from pprint import pprint
 import data.songkick as sk
 
-
 import settings
 
 # configure database connection
