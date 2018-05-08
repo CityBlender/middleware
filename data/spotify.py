@@ -36,9 +36,6 @@ def searchArtist(search):
   # get results
   results = spotify.search(q='artist:' + search, type='artist')
 
-  # print progress
-  print('Got search results for ' + '\033[92m' + search + '\033[0m')
-
   # return JSON
   return results
 
@@ -63,8 +60,6 @@ def getArtistInfo(search):
     'genre': artist['genres'],
     'image': artist['images']
   }
-
-  print('Got artist information for ' + '\033[92m' + artist['name'] + '\033[0m')
 
   return artist_object
 
@@ -130,11 +125,23 @@ def getArtistTopTracks(search):
       if feature.get('id')==track_id:
         track['feature'] = feature
 
-  # print results to console
-  print('Got Top Tracks data for ' + '\033[92m' + artist['name'] + '\033[0m')
-
   # return
   return top_tracks_array
 
 
+# return complete artist object
+def returnArtistObject(search):
+  # get basic artist info
+  artist = getArtistInfo(search)
 
+  # get artist's top tracks
+  top_tracks = getArtistTopTracks(search)
+
+  # assign top tracks to artist object
+  artist['tracks'] = top_tracks
+
+  # print progress to console
+  print('Successfully created an artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
+
+  # return artist object
+  return artist

@@ -29,7 +29,7 @@ db_london_artist = db_london['artists']
 # final_last = last.returnArtistObject(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e')
 # data.dumpJson('final-last-fm-test.json', final_last, './temp/')
 # last.getArtistTopTracks(search='Streetlight Manifesto')
-data.dumpJson('spotify-test-blockhead-top-tracks.json', spotify.getArtistTopTracks('Blockhead'), './temp/')
+data.dumpJson('spotify-test-blockhead-final.json', spotify.returnArtistObject('Blockhead'), './temp/')
 # spotify.getArtistInfo('Blockhead')
 
 # spotify.connectSpotify()
