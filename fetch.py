@@ -5,6 +5,7 @@ import data.songkick as sk
 import data.lastfm as last
 import data.spotify as spotify
 import data.musixmatch as musix
+import data.artist as artist
 from pprint import pprint
 
 #  London metropolitan area code
@@ -39,3 +40,5 @@ db_london_artist = db_london['artists']
 # data.dumpJson('musix-instrumental.json', musix.getTrackLyrics('d5a1ad42-898d-4d5b-922c-5891b6c73f5a'), './temp/' )
 # data.dumpJson('musix-lyrics.json', musix.getTrackLyrics('00bde944-7562-446f-ad0f-3d4bdc86b69f'), './temp/' )
 # data.dumpJson('drake.json', last.returnArtistObject(search='Drake'), './temp/' )
+data.dumpJson('test-artist-object.json', artist.getArtistObject(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e'), './temp/')
+data.dumpJson('test-artist-object-with-search.json', artist.getArtistObject(search='Streetlight Manifesto'), './temp/')

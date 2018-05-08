@@ -8,8 +8,6 @@ from pprint import pprint
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import settings
-import utils.dataHelper as dataHelper
-import utils.dropboxHelper as dropboxHelper
 
 spotify_credentials = [
   [os.getenv('SPOTIFY_CLIENT_ID_1'), os.getenv('SPOTIFY_CLIENT_SECRET_1')]

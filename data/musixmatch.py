@@ -1,15 +1,10 @@
-import dateutil
 import json
 import os, errno
 import random
 import requests
-import spotipy
 from pprint import pprint
-from spotipy.oauth2 import SpotifyClientCredentials
 
 import settings
-import utils.dataHelper as dataHelper
-import utils.dropboxHelper as dropboxHelper
 
 # Last.fm API keys
 musix_keys = ([
