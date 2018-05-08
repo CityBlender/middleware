@@ -85,14 +85,18 @@ def getArtistTopTags(mbid=None, search=None):
   # parse respons as JSON
   data = json.loads(response.text)
 
-  # get tags array
+  # get tags object
   tags_array = data['toptags']['tag']
+
+  # limit number of tags
+  tags_array_reduced = tags_array[:10]
 
   # print info to console
   name = data['toptags']['@attr']['artist']
   print('Got Top Tags for ' + '\033[92m' + name + '\033[0m')
 
-  return tags_array
+  # return tags object
+  return tags_array_reduced
 
 
 # get top tracks
