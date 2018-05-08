@@ -19,4 +19,5 @@ db_london_artist = db_london['artists']
 
 # last.getLastById('b6b8a637-e4f1-4d30-b400-2116e9182630')
 
-last.dumpArtistInfo(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e')
+last.getArtistTopTags(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e')
+# last.getArtistTopTags(search='Streetlight Manifesto')
