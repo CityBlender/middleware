@@ -4,6 +4,7 @@ import utils.dataHelper as data
 import data.songkick as sk
 import data.lastfm as last
 import data.spotify as spotify
+import data.musixmatch as musix
 from pprint import pprint
 
 #  London metropolitan area code
@@ -32,6 +33,9 @@ db_london_artist = db_london['artists']
 # data.dumpJson('spotify-test-blockhead-final.json', spotify.returnArtistObject('Blockhead'), './temp/')
 # spotify.getArtistInfo('Blockhead')
 
-data.dumpJson('last-fm-test-search.json', last.returnArtistObject(search='Blockhead'), './temp/')
+# data.dumpJson('last-fm-doors.json', last.returnArtistObject(search='The Doors'), './temp/')
 
-# spotify.connectSpotify()
+# data.dumpJson('musix-restricted.json', musix.getTrackLyrics('96734374-9968-40e2-ae97-a7632793dd82'), './temp/' )
+# data.dumpJson('musix-instrumental.json', musix.getTrackLyrics('d5a1ad42-898d-4d5b-922c-5891b6c73f5a'), './temp/' )
+# data.dumpJson('musix-lyrics.json', musix.getTrackLyrics('00bde944-7562-446f-ad0f-3d4bdc86b69f'), './temp/' )
+# data.dumpJson('drake.json', last.returnArtistObject(search='Drake'), './temp/' )

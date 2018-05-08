@@ -120,15 +120,20 @@ def getArtistTopTracks(mbid=None, search=None):
   top_tracks = []
 
   for track in data['toptracks']['track']:
-    track = {
+    track_object = {
       'name': track['name'],
-      'mbid': track['mbid'],
       'playcount': track['playcount'],
       'listeners': track['listeners'],
       'url': track['url'],
       'rank': track['@attr']['rank']
     }
-    top_tracks.append(track)
+
+    if 'mbid' not in track:
+      track_object['mbid'] = ''
+    else:
+      track_object['mbid'] = track['mbid']
+
+    top_tracks.append(track_object)
 
   name = data['toptracks']['@attr']['artist']
   print('Got Top 10 Tracks for ' + '\033[92m' + name + '\033[0m')
