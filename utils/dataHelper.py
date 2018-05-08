@@ -21,6 +21,8 @@ def dumpJson(filename, data, dump_dir):
   with open(dump_file_path, 'w') as fp:
     json.dump(data, fp)
 
+  print('Successfully dumped ' + '\033[92m' + filename + '\033[0m' + ' to ' + dump_dir)
+
 def removeDirectory(directory):
   input_dir = os.path.dirname(directory)
   shutil.rmtree(input_dir)

@@ -90,9 +90,46 @@ def getArtistTopTags(mbid=None, search=None):
 
   # print info to console
   name = data['toptags']['@attr']['artist']
-  print('Got Top Tags data for ' + '\033[92m' + name + '\033[0m')
+  print('Got Top Tags for ' + '\033[92m' + name + '\033[0m')
 
   return tags_array
+
+
+# get top tracks
+def getArtistTopTracks(mbid=None, search=None):
+
+  # configure API call
+  key = getLastKey()
+  if (mbid is not None):
+    url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&mbid=' + str(mbid) + '&api_key=' + str(key) + '&limit=10&format=json'
+  else:
+    search = search.replace(' ', '%20')
+    url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=' + search + '&api_key=' + str(key) + '&limit=10&autocorrect=1&format=json'
+
+  # get API response
+  response = requests.get(url)
+
+  # parse respons as JSON
+  data = json.loads(response.text)
+
+  # crete emtpy top tracks array
+  top_tracks = []
+
+  for track in data['toptracks']['track']:
+    track = {
+      'name': track['name'],
+      'mbid': track['mbid'],
+      'playcount': track['playcount'],
+      'listeners': track['listeners'],
+      'url': track['url'],
+      'rank': track['@attr']['rank']
+    }
+    top_tracks.append(track)
+
+  name = data['toptracks']['@attr']['artist']
+  print('Got Top 10 Tracks for ' + '\033[92m' + name + '\033[0m')
+
+  return top_tracks
 
 
 # return last-fm artist object
@@ -100,9 +137,11 @@ def returnArtistObject(mbid=None, search=None):
   if (mbid is not None):
     data = getArtistInfo(mbid=mbid)
     tags = getArtistTopTags(mbid=mbid)
+    tracks = getArtistTopTracks(mbid=mbid)
   else:
     data = getArtistInfo(search=search)
     tags = getArtistTopTags(search=search)
+    tracks = getArtistTopTracks(search=search)
 
   artist = data['artist']
 
@@ -115,10 +154,6 @@ def returnArtistObject(mbid=None, search=None):
       'url': image['#text']
     }
     artist_images.append(image)
-
-  # cobmine tags into an array of objects
-  # for tag in artist['tags']['tag']:
-
 
   # put together a final object
   artist_object = {
@@ -134,10 +169,12 @@ def returnArtistObject(mbid=None, search=None):
       'url': artist['bio']['links']['link']['href'],
       'published': artist['bio']['published']
     },
-    'tags': tags
+    'tags': tags,
+    'tracks': tracks
   }
 
+  print('Returning a complete artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
+
   # finally return an artist object
-  pprint(artist_object)
   return artist_object
 
