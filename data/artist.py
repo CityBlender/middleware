@@ -46,4 +46,5 @@ def getArtistObject(mbid=None, search=None):
     else:
       pass
 
+  # return aggregate object
   return artist_object
