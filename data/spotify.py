@@ -81,6 +81,8 @@ def getArtistTopTracks(search):
   # get results
   top_tracks = spotify.artist_top_tracks(artist_id=artist_id, country='GB')
 
+
+  # create empty array to be populated by top tracks
   top_tracks_array = []
 
   # construct an object for each track
@@ -103,10 +105,36 @@ def getArtistTopTracks(search):
         'images': track['album']['images']
       }
     }
+
+    # append track to top tracks array
     top_tracks_array.append(track_object)
+
+   # GET TOP TRACK FEATURES
+  # create an empty array for ids of top tracks
+  top_track_ids = []
+
+  # populate the array with ids of top tracks
+  for track in top_tracks['tracks']:
+    track_id = track['id']
+    top_track_ids.append(track_id)
+
+  # get track features for top tracks
+  top_tracks_features = spotify.audio_features(tracks=top_track_ids)
+
+  # lookup features base on track id
+  for track in top_tracks_array:
+    track_id = track['id']
+
+    # assign feature as an additional object key
+    for feature in top_tracks_features:
+      if feature.get('id')==track_id:
+        track['feature'] = feature
 
   # print results to console
   print('Got Top Tracks data for ' + '\033[92m' + artist['name'] + '\033[0m')
 
   # return
   return top_tracks_array
+
+
+
