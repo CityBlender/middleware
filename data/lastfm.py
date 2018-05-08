@@ -19,11 +19,30 @@ def getLastKey():
   key = random.choice (last_keys)
   return key
 
-#  get artist info
+#  get artist info by mbid
 def getArtistById(mbid):
   # configure API call
   key = getLastKey()
-  url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=Cher&api_key=' + str(key) + '&mbid' + str(mbid) + '&format=json'
+  url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&mbid=' + str(mbid) + '&api_key=' + str(key) + '&format=json'
+
+  # get API response
+  response = requests.get(url)
+
+  # parse respons as JSON
+  data = json.loads(response.text)
+
+  # print info to console
+  name = data['artist']['name']
+  print('Got JSON data for ' + '\033[92m' + name + '\033[0m')
+
+  # return JSON
+  return data
+
+#  get artist info by search query
+def getArtistBySearch(name):
+  # configure API call
+  key = getLastKey()
+  url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + name + '&api_key=' + str(key) + '&format=json'
 
   # get API response
   response = requests.get(url)
@@ -39,16 +58,36 @@ def getArtistById(mbid):
   return data
 
 
-# dump artist
-def dumpArtist(mbid):
+# dump artist by id
+def dumpArtistById(mbid):
   data = getArtistById(mbid)
-  dump_dir = './temp/artist-json-dumps/last-fm/'
-  dropbox_dir = '/data/artist-json-dumps/last-fm/'
+  dump_dir = './temp/artist-json-dumps/last-fm/mbid'
+  dropbox_dir = '/data/artist-json-dumps/last-fm/mbid'
 
   name = data['artist']['name']
 
   # define filename
   filename = name + '-' + mbid + '.json'
+
+  # dump JSON
+  dataHelper.dumpJson(filename, data, dump_dir)
+
+  # save to Dropbox
+  dropboxHelper.uploadToDrobpox(filename, dump_dir, dropbox_dir)
+
+  print('Dumped JSON for ' + '\033[92m' + name + '\033[0m' + ' in ' + dropbox_dir)
+
+
+# dump artist by search
+def dumpArtistByName(name):
+  data = getArtistBySearch(name)
+  dump_dir = './temp/artist-json-dumps/last-fm/search/'
+  dropbox_dir = '/data/artist-json-dumps/last-fm/search/'
+
+  name = data['artist']['name']
+
+  # define filename
+  filename = name + '.json'
 
   # dump JSON
   dataHelper.dumpJson(filename, data, dump_dir)

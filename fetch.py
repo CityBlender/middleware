@@ -19,4 +19,4 @@ db_london_artist = db_london['artists']
 
 # last.getLastById('b6b8a637-e4f1-4d30-b400-2116e9182630')
 
-last.dumpArtist('b6b8a637-e4f1-4d30-b400-2116e9182630')
+last.dumpArtistByName('Streetlight Manifesto')
