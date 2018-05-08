@@ -3,6 +3,7 @@ import utils.db as db
 import utils.dataHelper as data
 import data.songkick as sk
 import data.lastfm as last
+import data.spotify as spotify
 from pprint import pprint
 
 #  London metropolitan area code
@@ -25,6 +26,10 @@ db_london_artist = db_london['artists']
 
 # pprint(last.getArtistTopTags(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e'))
 
-final_last = last.returnArtistObject(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e')
-data.dumpJson('final-last-fm-test.json', final_last, './temp/')
+# final_last = last.returnArtistObject(mbid='cbc9199f-944b-42e9-a945-627c9fc0ba6e')
+# data.dumpJson('final-last-fm-test.json', final_last, './temp/')
 # last.getArtistTopTracks(search='Streetlight Manifesto')
+data.dumpJson('spotify-test-blockhead-top-tracks.json', spotify.getArtistTopTracks('Blockhead'), './temp/')
+# spotify.getArtistInfo('Blockhead')
+
+# spotify.connectSpotify()

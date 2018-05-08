@@ -14,6 +14,7 @@ dropbox = "*"
 pymongo = "*"
 pprint = "*"
 dnspython = "*"
+spotipy = "*"
 
 [dev-packages]
 
