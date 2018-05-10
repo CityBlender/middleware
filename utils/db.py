@@ -4,8 +4,22 @@ from pprint import pprint
 
 import settings
 
+import utils.dataHelper as dataHelper
 import data.songkick as sk
 import data.artist as artistData
+
+
+# print console header
+def printHeader():
+  return dataHelper.printHeader('DB:')
+
+# print green
+def printGreen(string):
+  return dataHelper.printGreen(string)
+
+# print underline
+def printUnderline(string):
+  return dataHelper.printUnderline(string)
 
 # configure database connection
 if settings.checkEnvironment() == 'production':
@@ -44,8 +58,10 @@ def dbInsertEvents(event_data, db_collection):
       events_inserted = events_inserted + 1
       db_collection.insert(event)
 
-  print('DB: Inserted ' + '\033[92m' + str(events_inserted) + '\033[0m' + ' events')
-  print('DB: Skipped ' + '\033[92m' + str(events_skipped) + '\033[0m' + ' duplicate events')
+  print_insert = printUnderline(printHeader() + ' Inserted ' + printGreen(str(events_inserted)) + ' events')
+  print_skip = printUnderline(printHeader() + ' Skipped ' + printGreen(str(events_skipped)) + ' duplicate events')
+  print(print_insert)
+  print(print_skip)
 
 
 # check if artist exists
@@ -63,6 +79,7 @@ def dbInsertArtist(artist_data, db_collection):
     pass
   else:
     db_collection.insert(artist_data)
-    print('DB: Inserted ' + '\033[92m' + str(artist_name) + '\033[0m')
+    print_console = printUnderline(printHeader() + ' Inserted ' + printGreen(artist_name))
+    print(print_console)
 
 

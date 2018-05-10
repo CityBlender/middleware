@@ -15,19 +15,21 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
   # loop throught each event
   for event in events:
 
-    # get all the artists
+    #get all the artists
     artists = event['artists']
 
     # loop throught artists
     for artist in artists:
       artist_ref = artistData.getArtistRef(artist)
-      artist_lastfm = spotify.getArtistObject(artist_ref)
-      # artist_data = artistData.getArtistObject(artist_ref)
+      artist_data = artistData.getArtistObject(artist_ref)
 
+      # attach additional data to artist object
+      artist['lastfm'] = artist_data['lastfm']
+      artist['spotify'] = artist_data['spotify']
       # store entire artist data object into database first
-      # db.dbInsertArtist(artist_data, artist_collection)
+      db.dbInsertArtist(artist, artist_collection)
 
-      # get selected data and attatch it to an artist in the event
+    # get selected data and attatch it to an artist in the event
 
     # store event into db
     # db.dbInsertEvents(events, events_collection)

@@ -22,9 +22,6 @@ def printHeader():
 def printGreen(string):
   return dataHelper.printGreen(string)
 
-# print underline
-def printUnderline(string):
-  return dataHelper.printUnderline(string)
 
 # authorise and connect with Spotify API
 def connectSpotify():
@@ -202,10 +199,8 @@ def getArtistObject(artist_ref):
     artist_object = artist_data
 
   # print progress to console
-  print_result = printUnderline(printHeader() + ' Returning an object for ' + printGreen(artist_ref['name']))
+  print_result = printHeader() + ' Returning an object for ' + printGreen(artist_ref['name'])
   print(print_result)
-
-  dataHelper.dumpJson('spotify-'+ artist_ref['name'] + '-custom-object.json', artist_object, './temp/spotify-dumps/')
 
   # return complete artist object
   return artist_object

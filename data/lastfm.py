@@ -30,9 +30,9 @@ def printHeader():
 def printGreen(string):
   return dataHelper.printGreen(string)
 
-# print underline
-def printUnderline(string):
-  return dataHelper.printUnderline(string)
+# load JSON
+def getJson(url):
+  return dataHelper.getJson(url)
 
 
 #######################
@@ -51,7 +51,7 @@ def getArtistInfo(artist_ref):
     url = api_url_base + '?method=artist.getinfo&mbid=' + str(artist_mbid) + '&api_key=' + str(key) + '&format=json'
 
     # get JSON response
-    data = dataHelper.getJson(url)
+    data = getJson(url)
 
     # if mbid returns an error try search instead
     if 'error' in data:
@@ -60,7 +60,7 @@ def getArtistInfo(artist_ref):
       url = api_url_base + '?method=artist.getinfo&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
 
       #get JSON response
-      data = dataHelper.getJson(url)
+      data = getJson(url)
 
       # set empty object if no artist is found
       if 'error' in data:
@@ -82,7 +82,7 @@ def getArtistInfo(artist_ref):
     # escape spaces so the name can be parsed via url
     search = artist_name.replace(' ', '%20')
     url = api_url_base + '?method=artist.getinfo&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
-    data = dataHelper.getJson(url)
+    data = getJson(url)
 
     # set empty object if no artist is found
     if 'error' in data:
@@ -118,13 +118,13 @@ def getArtistTopTags(data):
     # set API call URL via mbid if available
     if 'mbid' in artist:
       url = api_url_base + '?method=artist.gettoptags&mbid=' + artist['mbid'] + '&api_key=' + str(key) + '&format=json'
-      tags_data = dataHelper.getJson(url)
+      tags_data = getJson(url)
 
     # use name otherwise
     else:
       search = artist['name'].replace(' ', '%20')
       url = api_url_base + '?method=artist.gettoptags&artist=' + search + '&api_key=' + str(key) + '&format=json'
-      tags_data = dataHelper.getJson(url)
+      tags_data = getJson(url)
 
     # read in actual tags data
     tags = tags_data['toptags']['tag']
@@ -162,13 +162,13 @@ def getArtistTopTracks(data):
     # set API call URL via mbid if available
     if 'mbid' in artist:
       url = api_url_base + '?method=artist.gettoptracks&mbid=' + artist['mbid'] + '&api_key=' + str(key) + '&limit=10&format=json'
-      tracks_data = dataHelper.getJson(url)
+      tracks_data = getJson(url)
 
     # use name otherwise
     else:
       search = artist['name'].replace(' ', '%20')
       url = api_url_base + '?method=artist.gettoptracks&artist=' + search + '&api_key=' + str(key) + '&limit=10&autocorrect=1&format=json'
-      tracks_data = dataHelper.getJson(url)
+      tracks_data = getJson(url)
 
     # read in actual tracks data
     tracks = tracks_data['toptracks']['track']
@@ -253,6 +253,6 @@ def getArtistObject(artist_ref):
     }
 
   # return complete artist object
-  print_result = printUnderline(printHeader() + ' Returning an object for ' + printGreen(artist_ref['name']))
+  print_result = printHeader() + ' Returning an object for ' + printGreen(artist_ref['name'])
   print(print_result)
   return artist_object

@@ -42,39 +42,20 @@ def getArtistRef(artist):
   # return reference
   return artist_ref
 
-# create a single artist object
+#########################
+### getArtistObject() ###
+#########################
 def getArtistObject(artist_ref):
-  artist_name = artist_ref['name']
-  artist_id = artist_ref['id']
-  artist_mbid = artist_ref['mbid']
 
-  # mbid based artist lookup
-  if (artist_mbid):
-    last_data = lastfm.returnArtistObject(artist_ref)
+  # get data from APIs
+  lastfm_data = lastfm.getArtistObject(artist_ref)
+  spotify_data = spotify.getArtistObject(artist_ref)
 
-  # search based artist lookup
-  else:
-    last_data = lastfm.returnArtistObject(search=search)
-
-  spotify_data = spotify.returnArtistObject(artist_name)
+  # return a complete artist object
   artist_object = {
-    'name': artist_name,
-    'last_fm': last_data,
+    'lastfm': lastfm_data,
     'spotify': spotify_data
   }
-
-  # get last.fm tracks
-  tracks = artist_object['last_fm']['tracks']
-
-  # look for tracks with mbid
-  for track in tracks:
-    track_mbid = track['mbid']
-    if (len(track_mbid) > 0):
-      # track.get('mbid')==track_mbid:
-      lyrics = musix.getTrackLyrics(track_mbid)
-      track['lyrics'] = lyrics
-    else:
-      pass
 
   # return aggregate object
   return artist_object

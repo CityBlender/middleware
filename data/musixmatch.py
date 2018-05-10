@@ -6,50 +6,68 @@ from pprint import pprint
 
 import settings
 
-# Last.fm API keys
+# get MusixMatch API keys
 musix_keys = ([
   os.getenv('MUSIX_API_KEY_1')
 ])
 
-# get random Last.fm API key function
+# get random MusixMatch API key
 def getMusixKey():
   key = random.choice (musix_keys)
   return key
 
+# print console header
+def printHeader():
+  return dataHelper.printHeader('MusixMatch:')
 
-# get MusixMatch track id for better lyrics lookup
+# print green
+def printGreen(string):
+  return dataHelper.printGreen(string)
+
+# print underline
+def printUnderline(string):
+  return dataHelper.printUnderline(string)
+
+# load JSON
+def getJson(url):
+  return dataHelper.getJson(url)
+
+
+# set up API URL base
+api_url_base = 'http://api.musixmatch.com/ws/1.1/'
+
+####################
+### getMusixId() ###
+####################
 def getMusixId(mbid):
   # configure API call
   key = getMusixKey()
-  url = 'http://api.musixmatch.com/ws/1.1/track.get?track_mbid=' + str(mbid) + '&apikey=' + str(key)
+  url = api_url_base + 'track.get?track_mbid=' + str(mbid) + '&apikey=' + str(key)
 
-  # get API response
-  response = requests.get(url)
+  # get data
+  data = getJson(url)
 
-  # parse respons as JSON
-  data = json.loads(response.text)
-
-  # get the track data
+  # get MusixMatch track id for better lyrics lookup
   track_id = data['message']['body']['track']['track_id']
 
   # return JSON
   return track_id
 
-# get track lyrics
+#######################
+### getTrackLyrics() ###
+#######################
 def getTrackLyrics(mbid):
   # get MusixMatch track id first
   track_id = getMusixId(mbid)
 
   # configure API call
   key = getMusixKey()
-  url = 'http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=' + str(track_id) + '&apikey=' + str(key)
+  url = api_url_base + 'track.lyrics.get?track_id=' + str(track_id) + '&apikey=' + str(key)
 
-  # get API response
-  response = requests.get(url)
+  # get JSON response
+  data = getJson(url)
 
-  # parse respons as JSON
-  data = json.loads(response.text)
-
+  # get lyrics
   lyrics = data['message']['body']['lyrics']
 
   # if instrumental
@@ -85,5 +103,7 @@ def getTrackLyrics(mbid):
       'url': lyrics['backlink_url'],
       'lyrics_copyright': lyrics['lyrics_copyright']
     }
+
+  print(printHeader() + ' Got lyrics for ' + printGreen(artist_name))
 
   return lyrics_object
