@@ -14,6 +14,9 @@ last_keys = ([
   os.getenv('LAST_API_KEY_1')
 ])
 
+# set URL base
+api_url_base = 'http://ws.audioscrobbler.com/2.0/'
+
 # get random Last.fm API key function
 def getLastKey():
   key = random.choice (last_keys)
@@ -39,12 +42,9 @@ def getArtistInfo(artist_ref):
   # get API key
   key = getLastKey()
 
-  # get URL base
-  url_base = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo'
-
   ### mbid lookup
   if artist_mbid:
-    url = url_base + '&mbid=' + str(artist_mbid) + '&api_key=' + str(key) + '&format=json'
+    url = api_url_base + '?method=artist.getinfo&mbid=' + str(artist_mbid) + '&api_key=' + str(key) + '&format=json'
 
     # get JSON response
     data = dataHelper.getJson(url)
@@ -55,7 +55,7 @@ def getArtistInfo(artist_ref):
 
       # escape spaces for URL lookup
       search = artist_name.replace(' ', '%20')
-      url = url_base + '&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
+      url = api_url_base + '?method=artist.getinfo&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
 
       #get JSON response
       data = dataHelper.getJson(url)
@@ -79,7 +79,7 @@ def getArtistInfo(artist_ref):
   else:
     # escape spaces so the name can be parsed via url
     search = artist_name.replace(' ', '%20')
-    url = url_base + '&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
+    url = api_url_base + '?method=artist.getinfo&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
     data = dataHelper.getJson(url)
 
     # set empty object if no artist is found
@@ -92,48 +92,53 @@ def getArtistInfo(artist_ref):
       data_return = data
 
   # finally return the object
-  # print(data_return)
   return data_return
 
 
-# get artist tags
-# def getArtistTopTags(mbid=None, search=None):
-#   key = getLastKey()
+##########################
+### getArtistTopTags() ###
+##########################
+def getArtistTopTags(artist_ref):
 
-#   if (mbid is not None):
-#     mbid_check = getArtistInfoById(mbid)
-#     if mbid_check:
-#       url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&mbid=' + str(mbid) + '&api_key=' + str(key) + '&format=json'
-#     else:
+  # get API key
+  key = getLastKey()
 
-#   else:
-#     search = search.replace(' ', '%20')
-#     url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
+  # get artist data
+  data = getArtistInfo(artist_ref)
 
-#   # get API response
-#   response = requests.get(url)
+  # return empty array if the artist object is empty
+  if not data:
+    top_tags_return = []
+  else:
+    # get artist object
+    artist = data['artist']
 
-#   # parse respons as JSON
-#   data = json.loads(response.text)
+    # set API call URL via mbid if available
+    if 'mbid' in artist:
+      url = api_url_base + '?method=artist.gettoptags&mbid=' + artist['mbid'] + '&api_key=' + str(key) + '&format=json'
+      tags_data = dataHelper.getJson(url)
 
-#   # pprint(data)
+    # use name otherwise
+    else:
+      search = artist['name'].replace(' ', '%20')
+      url = api_url_base + '?method=artist.gettoptags&artist=' + search + '&api_key=' + str(key) + '&format=json'
+      tags_data = dataHelper.getJson(url)
 
-#   if 'error' in data:
-#     print('Last.fm: ' + data['message'])
-#     tags_array_reduced = {}
-#   else:
-#     # get tags object
-#     tags_array = data['toptags']['tag']
+    # read in actual tags data
+    tags = tags_data['toptags']['tag']
 
-#     # limit number of tags
-#     tags_array_reduced = tags_array[:10]
+    # only get top 10 tags
+    tags_reduced = tags[:10]
 
-#     # print info to console
-#     name = data['toptags']['@attr']['artist']
-#     print('Got Top Tags for ' + '\033[92m' + name + '\033[0m')
+    print(printHeader() + ' Got top 10 tags for ' + printGreen(artist_ref['name']))
 
-#   # return tags object
-#   return tags_array_reduced
+    dataHelper.dumpJson('last-fm-'+ artist_ref['name'] + '-top-tags-reduced.json', tags_reduced, './temp/last-fm-dumps/')
+
+    # return top 10 tags
+    return tags_reduced
+
+
+
 
 
 # get top tracks
