@@ -253,6 +253,6 @@ def getArtistObject(artist_ref):
     }
 
   # return complete artist object
-  print_result = printUnderline(printHeader() + ' Returning a complete object for ' + printGreen(artist_ref['name']))
+  print_result = printUnderline(printHeader() + ' Returning an object for ' + printGreen(artist_ref['name']))
   print(print_result)
   return artist_object

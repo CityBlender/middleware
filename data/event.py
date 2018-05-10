@@ -5,6 +5,7 @@ import settings as settings
 import utils.db as db
 import data.songkick as sk
 import data.lastfm as lastfm
+import data.spotify as spotify
 import data.artist as artistData
 
 def fetchAll(area, events_collection, artist_collection, min_date = settings.today, max_date = settings.today):
@@ -20,7 +21,7 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
     # loop throught artists
     for artist in artists:
       artist_ref = artistData.getArtistRef(artist)
-      artist_lastfm = lastfm.getArtistObject(artist_ref)
+      artist_lastfm = spotify.getArtistObject(artist_ref)
       # artist_data = artistData.getArtistObject(artist_ref)
 
       # store entire artist data object into database first

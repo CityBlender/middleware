@@ -8,11 +8,25 @@ from pprint import pprint
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import settings
+import utils.dataHelper as dataHelper
 
 spotify_credentials = [
   [os.getenv('SPOTIFY_CLIENT_ID_1'), os.getenv('SPOTIFY_CLIENT_SECRET_1')]
 ]
 
+# print console header
+def printHeader():
+  return dataHelper.printHeader('Spotify:')
+
+# print green
+def printGreen(string):
+  return dataHelper.printGreen(string)
+
+# print underline
+def printUnderline(string):
+  return dataHelper.printUnderline(string)
+
+# authorise and connect with Spotify API
 def connectSpotify():
   client = random.choice (spotify_credentials)
   client_id = client[0]
@@ -25,30 +39,49 @@ def connectSpotify():
   return spotify
 
 
-# search for artist by query
-def searchArtist(search):
+######################
+### searchArtist() ###
+######################
+def searchArtist(artist_ref):
+  # get artist name
+  artist_name = artist_ref['name']
 
   # configure connection to API
   spotify = connectSpotify()
 
-  # get results
-  results = spotify.search(q='artist:' + search, type='artist')
+  # get JSON response
+  results = spotify.search(q='artist:' + artist_name, type='artist')
 
-  # return JSON
-  return results
+  # get only artists field
+  artists = results['artists']['items']
 
-
-# get artist info based on a search
-def getArtistInfo(search):
-  # get results
-  search_results = searchArtist(search)
-
-  # get first result (let's just assume that is the most relevant one, right..)
-  artists = search_results['artists']['items']
-
+  # check if we got any results back
   if artists:
-    artist = search_results['artists']['items'][0]
-    # create an artist object
+    # get first result (let's just assume that is the most relevant one, right..)
+    artist = artists[0]
+  else:
+    # setting up dummy id to make later data handling easier
+    artist = {}
+
+
+  # return artist
+  return artist
+
+
+#######################
+### getArtistInfo() ###
+#######################
+def getArtistInfo(artist):
+
+  # get artist
+  artist = artist
+
+  # return dummy object if empty
+  if not artist:
+    artist_object = {}
+
+  # otherwise create artist object
+  else:
     artist_object = {
       'name': artist['name'],
       'type': artist['type'],
@@ -60,23 +93,25 @@ def getArtistInfo(search):
       'genre': artist['genres'],
       'image': artist['images']
     }
-  else:
-    artist_object = {
-      'id': ''
-    }
 
+    print(printHeader() + ' Got data for ' + printGreen(artist_object['name']))
+
+
+  # return artist object
   return artist_object
 
 
-# get top tracks for an artist
-def getArtistTopTracks(search):
+############################
+### getArtistTopTracks() ###
+############################
+def getArtistTopTracks(artist):
   # get artist information first
-  artist = getArtistInfo(search)
+  artist = artist
   artist_id = artist['id']
+  artist_name = artist['name']
 
   if not artist_id:
     top_tracks_array = []
-    pass
   else:
     # connect to Spotify
     spotify = connectSpotify()
@@ -132,28 +167,45 @@ def getArtistTopTracks(search):
         if feature.get('id')==track_id:
           track['feature'] = feature
 
+    # print progress to console
+    print(printHeader() + ' Got top tracks for ' + printGreen(artist_name))
+
+
   # return
   return top_tracks_array
 
 
-# return complete artist object
-def returnArtistObject(search):
-  # get basic artist info
-  artist = getArtistInfo(search)
+#########################
+### getArtistObject() ###
+#########################
+def getArtistObject(artist_ref):
 
-  if not artist['id']:
-    artist = {}
-    pass
+  # get artist
+  artist_search = searchArtist(artist_ref)
+
+  # return empty object if there are is no artist data
+  if not artist_search:
+    artist_object = {}
+
+  # otherwise construct an artist object
   else:
+    # get artist data
+    artist_data = getArtistInfo(artist_search)
 
     # get artist's top tracks
-    top_tracks = getArtistTopTracks(search)
+    artist_tracks = getArtistTopTracks(artist_search)
 
     # assign top tracks to artist object
-    artist['tracks'] = top_tracks
+    artist_data['tracks'] = artist_tracks
 
-    # print progress to console
-    print('Successfully created an artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
+    # assign data to an object
+    artist_object = artist_data
 
-  # return artist object
-  return artist
+  # print progress to console
+  print_result = printUnderline(printHeader() + ' Returning an object for ' + printGreen(artist_ref['name']))
+  print(print_result)
+
+  dataHelper.dumpJson('spotify-'+ artist_ref['name'] + '-custom-object.json', artist_object, './temp/spotify-dumps/')
+
+  # return complete artist object
+  return artist_object
