@@ -24,11 +24,15 @@ def getLastKey():
 
 # print console header
 def printHeader():
-  return dataHelper.printBold('Last.Fm:')
+  return dataHelper.printHeader('Last.Fm:')
 
 # print green
 def printGreen(string):
   return dataHelper.printGreen(string)
+
+# print underline
+def printUnderline(string):
+  return dataHelper.printUnderline(string)
 
 
 #######################
@@ -51,8 +55,6 @@ def getArtistInfo(artist_ref):
 
     # if mbid returns an error try search instead
     if 'error' in data:
-      print(printHeader() + ' Cannot find ' + printGreen(artist_name) + ' by mbid. Trying search instead.')
-
       # escape spaces for URL lookup
       search = artist_name.replace(' ', '%20')
       url = api_url_base + '?method=artist.getinfo&artist=' + search + '&api_key=' + str(key) + '&autocorrect=1&format=json'
@@ -62,17 +64,17 @@ def getArtistInfo(artist_ref):
 
       # set empty object if no artist is found
       if 'error' in data:
-        print(printHeader() + ' Cannot find' + printGreen(artist_name) + ' by search either. Returning empty object.')
+        print(printHeader() + ' Cannot find' + printGreen(artist_name) + ' using search. Returning empty object.')
         data_return = {}
 
       # return a first search result
       else:
-        print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search. Returning populated object.')
+        print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
         data_return = data
 
     # return data if found using mbid
     else:
-      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using mbid. Returning populated object.')
+      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using mbid.')
       data_return = data
 
   ### search lookup
@@ -88,7 +90,7 @@ def getArtistInfo(artist_ref):
       data_return = {}
     # otherwise return search results
     else:
-      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search. Returning populated object.')
+      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
       data_return = data
 
   # finally return the object
@@ -98,13 +100,13 @@ def getArtistInfo(artist_ref):
 ##########################
 ### getArtistTopTags() ###
 ##########################
-def getArtistTopTags(artist_ref):
+def getArtistTopTags(data):
 
   # get API key
   key = getLastKey()
 
   # get artist data
-  data = getArtistInfo(artist_ref)
+  data = data
 
   # return empty array if the artist object is empty
   if not data:
@@ -131,7 +133,7 @@ def getArtistTopTags(artist_ref):
     tags_reduced = tags[:10]
 
     top_tags_return = tags_reduced
-    print(printHeader() + ' Got top 10 tags for ' + printGreen(artist_ref['name']))
+    print(printHeader() + ' Got top 10 tags for ' + printGreen(artist['name']))
 
   # return top 10 tags
   return top_tags_return
@@ -142,13 +144,13 @@ def getArtistTopTags(artist_ref):
 ############################
 ### getArtistTopTracks() ###
 ############################
-def getArtistTopTracks(artist_ref):
+def getArtistTopTracks(data):
 
   # get API key
   key = getLastKey()
 
   # get artist data
-  data = getArtistInfo(artist_ref)
+  data = data
 
   # return empty array if the artist object is empty
   if not data:
@@ -194,7 +196,7 @@ def getArtistTopTracks(artist_ref):
       top_tracks_return.append(track_object)
 
   # return top 10 tracks
-  print(printHeader() + ' Got Top 10 Tracks for ' + printGreen(artist_ref['name']))
+  print(printHeader() + ' Got top 10 tracks for ' + printGreen(artist['name']))
   return top_tracks_return
 
 
@@ -211,8 +213,8 @@ def getArtistObject(artist_ref):
   if not artist_data:
     artist_object = {}
   else:
-    artist_tags = getArtistTopTags(artist_ref)
-    artist_tracks = getArtistTopTracks(artist_ref)
+    artist_tags = getArtistTopTags(artist_data)
+    artist_tracks = getArtistTopTracks(artist_data)
 
     # get artist data
     artist = artist_data['artist']
@@ -251,6 +253,6 @@ def getArtistObject(artist_ref):
     }
 
   # return complete artist object
-  print(printHeader() + ' Returning a complete object for ' + printGreen(artist_ref['name']))
+  print_result = printUnderline(printHeader() + ' Returning a complete object for ' + printGreen(artist_ref['name']))
+  print(print_result)
   return artist_object
-

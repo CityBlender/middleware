@@ -48,3 +48,15 @@ def printBold(string):
   suffix = '\033[0m'
   bold = prefix + string + suffix
   return bold
+
+def printHeader(string):
+  prefix = '\033[95m'
+  suffix = '\033[0m'
+  header = prefix + string + suffix
+  return header
+
+def printUnderline(string):
+  prefix = '\033[4m'
+  suffix = '\033[0m'
+  underline = prefix + string + suffix
+  return underline
