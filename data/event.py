@@ -20,7 +20,7 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
     # loop throught artists
     for artist in artists:
       artist_ref = artistData.getArtistRef(artist)
-      artist_lastfm = lastfm.getArtistTopTracks(artist_ref)
+      artist_lastfm = lastfm.getArtistObject(artist_ref)
       # artist_data = artistData.getArtistObject(artist_ref)
 
       # store entire artist data object into database first

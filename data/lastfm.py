@@ -193,60 +193,64 @@ def getArtistTopTracks(artist_ref):
       # append individual track to top tracks array
       top_tracks_return.append(track_object)
 
-  print(printHeader() + ' Got Top 10 Tracks for ' + printGreen(artist_ref['name']))
-  dataHelper.dumpJson('last-fm-'+ artist_ref['name'] + '-top-tracks.json', top_tracks_return, './temp/last-fm-dumps/')
   # return top 10 tracks
+  print(printHeader() + ' Got Top 10 Tracks for ' + printGreen(artist_ref['name']))
   return top_tracks_return
 
 
-# # return last-fm artist object
-# def returnArtistObject(mbid=None, search=None):
-#   if (mbid):
-#     data = getArtistInfo(mbid=mbid)
-#     tags = getArtistTopTags(mbid=mbid)
-#     tracks = getArtistTopTracks(mbid=mbid)
-#     artist_mbid = mbid
-#   else:
-#     data = getArtistInfo(search=search)
-#     tags = getArtistTopTags(search=search)
-#     tracks = getArtistTopTracks(search=search)
-#     artist_mbid = ''
 
-#   if not data:
-#     artist_object = {}
-#   else:
-#     artist = data['artist']
+############################
+### getArtistObject() ###
+############################
+def getArtistObject(artist_ref):
 
-#     artist_images = []
+  # get artist data
+  artist_data = getArtistInfo(artist_ref)
 
-#     # combine images into an array of objects
-#     for image in artist['image']:
-#       image = {
-#         'size': image['size'],
-#         'url': image['#text']
-#       }
-#       artist_images.append(image)
+  # return empty object if the artist is empty
+  if not artist_data:
+    artist_object = {}
+  else:
+    artist_tags = getArtistTopTags(artist_ref)
+    artist_tracks = getArtistTopTracks(artist_ref)
 
-#     # put together a final object
-#     artist_object = {
-#       'name': artist['name'],
-#       'mbid': artist_mbid,
-#       'url': artist['url'],
-#       'listeners': artist['stats']['listeners'],
-#       'playcount': artist['stats']['playcount'],
-#       'image': artist_images,
-#       'bio': {
-#         'summary': artist['bio']['summary'],
-#         'content': artist['bio']['content'],
-#         'url': artist['bio']['links']['link']['href'],
-#         'published': artist['bio']['published']
-#       },
-#       'tags': tags,
-#       'tracks': tracks
-#     }
+    # get artist data
+    artist = artist_data['artist']
 
-#     print('Returning a complete artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
+    # set up mbid
+    if 'mbid' in artist:
+      artist_mbid = artist['mbid']
+    else:
+      artist_mbid = ''
 
-#   # finally return an artist object
-#   return artist_object
+    # get artist images array
+    artist_images = []
+    for image in artist['image']:
+      image = {
+        'url': image['#text'],
+        'size': image['size']
+      }
+      artist_images.append(image)
+
+    # put together a final artist object
+    artist_object = {
+      'name': artist['name'],
+      'mbid': artist_mbid,
+      'url': artist['url'],
+      'listeners': artist['stats']['listeners'],
+      'playcount': artist['stats']['playcount'],
+      'image': artist_images,
+      'bio': {
+        'summary': artist['bio']['summary'],
+        'content': artist['bio']['content'],
+        'url': artist['bio']['links']['link']['href'],
+        'published': artist['bio']['published']
+      },
+      'tags': artist_tags,
+      'tracks': artist_tracks
+    }
+
+  # return complete artist object
+  print(printHeader() + ' Returning a complete object for ' + printGreen(artist_ref['name']))
+  return artist_object
 
