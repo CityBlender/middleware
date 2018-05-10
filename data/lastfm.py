@@ -130,59 +130,73 @@ def getArtistTopTags(artist_ref):
     # only get top 10 tags
     tags_reduced = tags[:10]
 
+    top_tags_return = tags_reduced
     print(printHeader() + ' Got top 10 tags for ' + printGreen(artist_ref['name']))
 
-    dataHelper.dumpJson('last-fm-'+ artist_ref['name'] + '-top-tags-reduced.json', tags_reduced, './temp/last-fm-dumps/')
-
-    # return top 10 tags
-    return tags_reduced
+  # return top 10 tags
+  return top_tags_return
 
 
 
 
+############################
+### getArtistTopTracks() ###
+############################
+def getArtistTopTracks(artist_ref):
 
-# get top tracks
-# def getArtistTopTracks(mbid=None, search=None):
+  # get API key
+  key = getLastKey()
 
-#   # configure API call
-#   key = getLastKey()
-#   if (mbid is not None):
-#     url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&mbid=' + str(mbid) + '&api_key=' + str(key) + '&limit=10&format=json'
-#   else:
-#     search = search.replace(' ', '%20')
-#     url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=' + search + '&api_key=' + str(key) + '&limit=10&autocorrect=1&format=json'
+  # get artist data
+  data = getArtistInfo(artist_ref)
 
-#   # get API response
-#   response = requests.get(url)
+  # return empty array if the artist object is empty
+  if not data:
+    top_tracks_return = []
+  else:
+    # get artist object
+    artist = data['artist']
 
-#   # parse respons as JSON
-#   data = json.loads(response.text)
+    # set API call URL via mbid if available
+    if 'mbid' in artist:
+      url = api_url_base + '?method=artist.gettoptracks&mbid=' + artist['mbid'] + '&api_key=' + str(key) + '&limit=10&format=json'
+      tracks_data = dataHelper.getJson(url)
 
-#   # crete emtpy top tracks array
-#   top_tracks = []
+    # use name otherwise
+    else:
+      search = artist['name'].replace(' ', '%20')
+      url = api_url_base + '?method=artist.gettoptracks&artist=' + search + '&api_key=' + str(key) + '&limit=10&autocorrect=1&format=json'
+      tracks_data = dataHelper.getJson(url)
 
-#   if 'error' in data:
-#     pass
-#   else:
-#     for track in data['toptracks']['track']:
-#       track_object = {
-#         'name': track['name'],
-#         'playcount': track['playcount'],
-#         'listeners': track['listeners'],
-#         'url': track['url'],
-#         'rank': track['@attr']['rank']
-#       }
+    # read in actual tracks data
+    tracks = tracks_data['toptracks']['track']
 
-#       if 'mbid' not in track:
-#         track_object['mbid'] = ''
-#       else:
-#         track_object['mbid'] = track['mbid']
+    # create empty array to populate with tracks
+    top_tracks_return = []
 
-#       top_tracks.append(track_object)
-#     name = data['toptracks']['@attr']['artist']
-#     print('Got Top 10 Tracks for ' + '\033[92m' + name + '\033[0m')
+    # create an object for each track
+    for track in tracks:
+      track_object = {
+        'name': track['name'],
+        'playcount': track['playcount'],
+        'listeners': track['listeners'],
+        'url': track['url'],
+        'rank': track['@attr']['rank']
+      }
 
-#   return top_tracks
+      # get mbid is track has one
+      if 'mbid' not in track:
+        track_object['mbid'] = ''
+      else:
+        track_object['mbid'] = track['mbid']
+
+      # append individual track to top tracks array
+      top_tracks_return.append(track_object)
+
+  print(printHeader() + ' Got Top 10 Tracks for ' + printGreen(artist_ref['name']))
+  dataHelper.dumpJson('last-fm-'+ artist_ref['name'] + '-top-tracks.json', top_tracks_return, './temp/last-fm-dumps/')
+  # return top 10 tracks
+  return top_tracks_return
 
 
 # # return last-fm artist object
