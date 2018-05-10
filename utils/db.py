@@ -1,9 +1,11 @@
 import os, errno
 from pymongo import MongoClient
 from pprint import pprint
-import data.songkick as sk
 
 import settings
+
+import data.songkick as sk
+import data.artist as artistData
 
 # configure database connection
 if settings.checkEnvironment() == 'production':
@@ -23,18 +25,18 @@ def dbStatus():
 
 # check if event exists
 def eventExists(new_event_id, db_collection):
-  if db_collection.find({'event_id': new_event_id}).count() > 0:
+  if db_collection.find({'id': new_event_id}).count() > 0:
     return True
   else:
     return False
 
 # insert events into database
-def dbInsertEvents(area, db_collection):
-  events = sk.fetchGigs(metro_area_code=area)
+def dbInsertEvents(event_data, db_collection):
+  events = event_data
   events_inserted = 0
   events_skipped = 0
   for event in events:
-    event_id = event['event_id']
+    event_id = event['id']
     if eventExists(event_id, db_collection):
       events_skipped = events_skipped + 1
       pass
@@ -44,4 +46,23 @@ def dbInsertEvents(area, db_collection):
 
   print('DB: Inserted ' + '\033[92m' + str(events_inserted) + '\033[0m' + ' events')
   print('DB: Skipped ' + '\033[92m' + str(events_skipped) + '\033[0m' + ' duplicate events')
+
+
+# check if artist exists
+def artistExists(new_artist_id, db_collection):
+  if db_collection.find({'id': new_artist_id}).count() > 0:
+    return True
+  else:
+    return False
+
+# insert events into database
+def dbInsertArtist(artist_data, db_collection):
+  artist_id = artist_data['id']
+  artist_name = artist_data['name']
+  if artistExists(artist_id, db_collection):
+    pass
+  else:
+    db_collection.insert(artist_data)
+    print('DB: Inserted ' + '\033[92m' + str(artist_name) + '\033[0m')
+
 

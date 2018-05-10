@@ -131,11 +131,11 @@ def getEventsObject(data):
     # put everything together into an object
     event_object = {
       # event meta
-      'event_id': event['id'],
-      'event_name': event['displayName'],
-      'event_type': event['type'],
-      'event_url': event['uri'],
-      'event_popularity': event['popularity'],
+      'id': event['id'],
+      'name': event['displayName'],
+      'type': event['type'],
+      'url': event['uri'],
+      'popularity': event['popularity'],
 
       # time
       'date': event['start']['date'],

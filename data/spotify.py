@@ -44,20 +44,26 @@ def getArtistInfo(search):
   search_results = searchArtist(search)
 
   # get first result (let's just assume that is the most relevant one, right..)
-  artist = search_results['artists']['items'][0]
+  artists = search_results['artists']['items']
 
-  # create an artist object
-  artist_object = {
-    'name': artist['name'],
-    'type': artist['type'],
-    'href': artist['external_urls']['spotify'],
-    'id': artist['id'],
-    'uri': artist['uri'],
-    'popularity': artist['popularity'],
-    'followers': artist['followers']['total'],
-    'genre': artist['genres'],
-    'image': artist['images']
-  }
+  if artists:
+    artist = search_results['artists']['items'][0]
+    # create an artist object
+    artist_object = {
+      'name': artist['name'],
+      'type': artist['type'],
+      'href': artist['external_urls']['spotify'],
+      'id': artist['id'],
+      'uri': artist['uri'],
+      'popularity': artist['popularity'],
+      'followers': artist['followers']['total'],
+      'genre': artist['genres'],
+      'image': artist['images']
+    }
+  else:
+    artist_object = {
+      'id': ''
+    }
 
   return artist_object
 
@@ -68,60 +74,63 @@ def getArtistTopTracks(search):
   artist = getArtistInfo(search)
   artist_id = artist['id']
 
-  # connect to Spotify
-  spotify = connectSpotify()
+  if not artist_id:
+    top_tracks_array = []
+    pass
+  else:
+    # connect to Spotify
+    spotify = connectSpotify()
 
-  # get results
-  top_tracks = spotify.artist_top_tracks(artist_id=artist_id, country='GB')
+    # get results
+    top_tracks = spotify.artist_top_tracks(artist_id=artist_id, country='GB')
 
+    # create empty array to be populated by top tracks
+    top_tracks_array = []
 
-  # create empty array to be populated by top tracks
-  top_tracks_array = []
-
-  # construct an object for each track
-  for track in top_tracks['tracks']:
-    track_object = {
-      'name': track['name'],
-      'type': track['type'],
-      'href': track['external_urls']['spotify'],
-      'id': track['id'],
-      'uri': track['uri'],
-      'duration_ms': track['duration_ms'],
-      'preview_url': track['preview_url'],
-      'album': {
-        'name': track['album']['name'],
-        'type': track['album']['type'],
-        'href': track['album']['external_urls']['spotify'],
-        'id': track['album']['id'],
-        'uri': track['album']['uri'],
-        'release_date': track['album']['release_date'],
-        'images': track['album']['images']
+    # construct an object for each track
+    for track in top_tracks['tracks']:
+      track_object = {
+        'name': track['name'],
+        'type': track['type'],
+        'href': track['external_urls']['spotify'],
+        'id': track['id'],
+        'uri': track['uri'],
+        'duration_ms': track['duration_ms'],
+        'preview_url': track['preview_url'],
+        'album': {
+          'name': track['album']['name'],
+          'type': track['album']['type'],
+          'href': track['album']['external_urls']['spotify'],
+          'id': track['album']['id'],
+          'uri': track['album']['uri'],
+          'release_date': track['album']['release_date'],
+          'images': track['album']['images']
+        }
       }
-    }
 
-    # append track to top tracks array
-    top_tracks_array.append(track_object)
+      # append track to top tracks array
+      top_tracks_array.append(track_object)
 
-   # GET TOP TRACK FEATURES
-  # create an empty array for ids of top tracks
-  top_track_ids = []
+    # GET TOP TRACK FEATURES
+    # create an empty array for ids of top tracks
+    top_track_ids = []
 
-  # populate the array with ids of top tracks
-  for track in top_tracks['tracks']:
-    track_id = track['id']
-    top_track_ids.append(track_id)
+    # populate the array with ids of top tracks
+    for track in top_tracks['tracks']:
+      track_id = track['id']
+      top_track_ids.append(track_id)
 
-  # get track features for top tracks
-  top_tracks_features = spotify.audio_features(tracks=top_track_ids)
+    # get track features for top tracks
+    top_tracks_features = spotify.audio_features(tracks=top_track_ids)
 
-  # lookup features base on track id
-  for track in top_tracks_array:
-    track_id = track['id']
+    # lookup features base on track id
+    for track in top_tracks_array:
+      track_id = track['id']
 
-    # assign feature as an additional object key
-    for feature in top_tracks_features:
-      if feature.get('id')==track_id:
-        track['feature'] = feature
+      # assign feature as an additional object key
+      for feature in top_tracks_features:
+        if feature.get('id')==track_id:
+          track['feature'] = feature
 
   # return
   return top_tracks_array
@@ -132,14 +141,19 @@ def returnArtistObject(search):
   # get basic artist info
   artist = getArtistInfo(search)
 
-  # get artist's top tracks
-  top_tracks = getArtistTopTracks(search)
+  if not artist['id']:
+    artist = {}
+    pass
+  else:
 
-  # assign top tracks to artist object
-  artist['tracks'] = top_tracks
+    # get artist's top tracks
+    top_tracks = getArtistTopTracks(search)
 
-  # print progress to console
-  print('Successfully created an artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
+    # assign top tracks to artist object
+    artist['tracks'] = top_tracks
+
+    # print progress to console
+    print('Successfully created an artist object for ' + '\033[92m' + artist['name'] + '\033[0m')
 
   # return artist object
   return artist
