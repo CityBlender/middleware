@@ -22,6 +22,8 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
     # get all the artists
     artists = event['artists']
 
+    # create empty features array to populate with artist data
+
     # loop throught artists
     for artist in artists:
       artist_ref = artistData.getArtistRef(artist)
@@ -37,11 +39,16 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
 
       # store stand-alone artist object into database
       # db.dbInsertArtist(artist_object, artist_collection)
-      dataHelper.dumpJson(str(artist_ref['id'])+'.json', artist_data, './temp/artist-db-dump/')
+      # features = artistData.appendSpotifyData(artist_data)
+      # dataHelper.dumpJson(str(artist_ref['id'])+'.json', artist_data, './temp/artist-db-dump/')
 
-      # get a subset of data to attach to event
+      # get a subset of Spotify data to attach to event
       artist['spotify'] = artistData.appendSpotifyData(artist_data)
       artist['lastfm'] = artistData.appendLastfmData(artist_data)
+      # spotify = artistData.appendSpotifyData(artist_data)
+
+      # loop through Spotify artist data
+      # spotify_features = spotify['tracks']
 
 
 

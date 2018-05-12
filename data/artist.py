@@ -80,38 +80,11 @@ def appendSpotifyData(artist_data):
       'popularity': spotify['popularity'],
       'followers': spotify['followers'],
       'genre': spotify['genre'],
-      'image': spotify['image']
+      'image': spotify['image'],
+      'features': spotify['features']
     }
 
     # loop through Spotify tracks
-    spotify_tracks = spotify['tracks']
-    spotify_tracks_array = []
-
-    for track in spotify_tracks:
-      track_info = {
-        'name': track['name'],
-        'href': track['href'],
-        'duration_ms': track['duration_ms'],
-        'preview_url': track['preview_url'],
-        'feature': {
-          'danceability': track['feature']['danceability'],
-          'energy': track['feature']['energy'],
-          'key': track['feature']['key'],
-          'loudness': track['feature']['loudness'],
-          'mode': track['feature']['mode'],
-          'speechiness': track['feature']['speechiness'],
-          'acousticness': track['feature']['acousticness'],
-          'instrumentalness': track['feature']['instrumentalness'],
-          'liveness': track['feature']['liveness'],
-          'valence': track['feature']['valence'],
-          'tempo': track['feature']['tempo'],
-          'time_signature': track['feature']['time_signature']
-        }
-      }
-      spotify_tracks_array.append(track_info)
-
-    # append array of tracks to spotify artist data
-    artist['tracks'] = spotify_tracks_array
 
   # return new object
   return artist
@@ -132,7 +105,7 @@ def appendLastfmData(artist_data):
       'url': lastfm['url'],
       'listeners': lastfm['listeners'],
       'playcount': lastfm['playcount'],
-      'image': lastfm['image'],
+      'image': lastfm['image']
     }
 
     # loop through lastfm tags
@@ -140,30 +113,11 @@ def appendLastfmData(artist_data):
     lastfm_tags_array = []
 
     for tag in lastfm_tags:
-      tag_info = {
-        'name': tag['name'],
-        'count': tag['count']
-      }
-      lastfm_tags_array.append(tag_info)
+      lastfm_tags_array.append(tag['name'])
 
     # append to artist object
     artist['tags'] = lastfm_tags_array
 
-    # loop through lastfm tracks
-    lastfm_tracks = lastfm['tracks']
-    lastfm_tracks_array = []
-
-    for track in lastfm_tracks:
-      track_info = {
-        'name': track['name'],
-        'playcount': track['playcount'],
-        'listeners': track['listeners'],
-        'rank': track['rank'],
-      }
-      lastfm_tracks_array.append(track_info)
-
-    # append to artist object
-    artist['tracks'] = lastfm_tracks_array
 
   # return artist object
   return artist

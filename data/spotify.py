@@ -155,21 +155,23 @@ def getArtistTopTracks(artist):
     # get track features for top tracks
     top_tracks_features = spotify.audio_features(tracks=top_track_ids)
 
-    # lookup features based on track id
-    for track in top_tracks_array:
-      track_id = track['id']
+    # remove None values from top tracks
+    top_tracks_features = [x for x in top_tracks_features if x is not None]
 
-      # assign feature as an additional object key
-      for feature in top_tracks_features:
-        if feature:
-          track['feature'] = feature
+    # assign features to an appropriate track based on id
+    for feature in top_tracks_features:
+      feature_id = feature['id']
+      track = [track for track in top_tracks_array if track['id']==feature_id][0]
+
+      track['features'] = feature
+
 
     # print progress to console
     print(printHeader() + ' Got top tracks for ' + printGreen(artist_name))
 
-
   # return
   return top_tracks_array
+
 
 
 #########################
@@ -195,12 +197,69 @@ def getArtistObject(artist_ref):
     # assign top tracks to artist object
     artist_data['tracks'] = artist_tracks
 
+    # create empty arrays for collecting aggregate features
+    danceability = []
+    energy = []
+    key = []
+    loudness = []
+    mode = []
+    speechiness = []
+    acousticness = []
+    instrumentalness = []
+    liveness = []
+    valence = []
+    tempo = []
+    duration = []
+    time_signature = []
+
+    # loop throught track features
+    for track in artist_tracks:
+      # pprint(len(track['features']))
+      if 'features' in track:
+        feature = track['features']
+
+        danceability.append(feature['danceability'])
+        energy.append(feature['energy'])
+        key.append(feature['key'])
+        loudness.append(feature['loudness'])
+        mode.append(feature['mode'])
+        speechiness.append(feature['speechiness'])
+        acousticness.append(feature['acousticness'])
+        instrumentalness.append(feature['instrumentalness'])
+        liveness.append(feature['liveness'])
+        valence.append(feature['valence'])
+        tempo.append(feature['tempo'])
+        duration.append(feature['duration_ms'])
+        time_signature.append(feature['time_signature'])
+      else:
+        pass
+
+    # attach aggreate arrays to artist
+    artist_data['features'] = {
+      'danceability' : danceability,
+      'energy' : energy,
+      'key' : key,
+      'loudness' : loudness,
+      'mode' : mode,
+      'speechiness' : speechiness,
+      'acousticness' : acousticness,
+      'instrumentalness' : instrumentalness,
+      'liveness' : liveness,
+      'valence' : valence,
+      'tempo' : tempo,
+      'duration_ms' : duration,
+      'time_signature' : time_signature
+    }
+
+
     # assign data to an object
     artist_object = artist_data
 
   # print progress to console
   print_result = printHeader() + ' Returning an object for ' + printGreen(artist_ref['name'])
   print(print_result)
+
+  dataHelper.dumpJson(artist_ref['name'] + '-object.json', artist_object, './temp/spotify-final-artist-dump/')
 
   # return complete artist object
   return artist_object
