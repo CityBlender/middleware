@@ -155,13 +155,13 @@ def getArtistTopTracks(artist):
     # get track features for top tracks
     top_tracks_features = spotify.audio_features(tracks=top_track_ids)
 
-    # lookup features base on track id
+    # lookup features based on track id
     for track in top_tracks_array:
       track_id = track['id']
 
       # assign feature as an additional object key
       for feature in top_tracks_features:
-        if feature.get('id')==track_id:
+        if feature:
           track['feature'] = feature
 
     # print progress to console

@@ -4,6 +4,8 @@ import os, errno
 import pandas as pd
 import random
 import requests
+from pprint import pprint
+
 
 import settings
 import utils.dataHelper as dataHelper
@@ -125,8 +127,9 @@ def getEventsObject(data):
     event_datetime_string = event['start']['datetime']
     if event_datetime_string is not None:
       event_datetime = dateutil.parser.parse(event_datetime_string)
+      event_datetime = str(event_datetime)
     else:
-      event_datetime = event_datetime_string
+      event_datetime = ''
 
     # put everything together into an object
     event_object = {
