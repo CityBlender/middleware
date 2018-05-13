@@ -1,12 +1,7 @@
 import settings as settings
 import utils.db as db
 import utils.dataHelper as data
-import data.songkick as sk
-import data.lastfm as lastfm
-import data.spotify as spotify
-import data.musixmatch as musix
 import data.event as event
-import data.artist as artist
 from pprint import pprint
 
 #  London metropolitan area code
