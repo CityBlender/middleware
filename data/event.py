@@ -132,24 +132,18 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
       'tags': lastfm_tags
     }
 
-    # attach FourSquare venue info
+    # get venue object
     venue = event['venue']
 
     # get venue info
-    venue_data = fq.findVenue(venue)
+    venue_data = fq.getVenueObject(venue)
+
+    # attach FourSquare venue info
+    event['foursquare'] = venue_data
 
 
 
-
-
-
-
-    # store individual event into database
     dataHelper.dumpJson(event['name'] + '.json', event, './temp/final-event-db-dump/')
-
-
-
-    # get selected data and attatch it to an artist in the event
 
     # store event into db
     # db.dbInsertEvents(events, events_collection)
