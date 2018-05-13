@@ -1,7 +1,6 @@
 import dateutil
 import json
 import os, errno
-import pandas as pd
 import random
 import requests
 from pprint import pprint
