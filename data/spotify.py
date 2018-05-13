@@ -259,7 +259,5 @@ def getArtistObject(artist_ref):
   print_result = printHeader() + ' Returning an object for ' + printGreen(artist_ref['name'])
   print(print_result)
 
-  dataHelper.dumpJson(artist_ref['name'] + '-object.json', artist_object, './temp/spotify-final-artist-dump/')
-
   # return complete artist object
   return artist_object

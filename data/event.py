@@ -24,6 +24,31 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
 
     # create empty features array to populate with artist data
 
+    # Spotify features
+    danceability = []
+    energy = []
+    key = []
+    loudness = []
+    mode = []
+    speechiness = []
+    acousticness = []
+    instrumentalness = []
+    liveness = []
+    valence = []
+    tempo = []
+    duration = []
+    time_signature = []
+
+    # Spotify other
+    spotify_genres = []
+    spotify_popularity = []
+    spotify_followers = []
+
+    # Lastfm data
+    lastfm_listeners = []
+    lastfm_playcount = []
+    lastfm_tags = []
+
     # loop throught artists
     for artist in artists:
       artist_ref = artistData.getArtistRef(artist)
@@ -39,16 +64,74 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
 
       # store stand-alone artist object into database
       # db.dbInsertArtist(artist_object, artist_collection)
-      # features = artistData.appendSpotifyData(artist_data)
-      # dataHelper.dumpJson(str(artist_ref['id'])+'.json', artist_data, './temp/artist-db-dump/')
 
       # get a subset of Spotify data to attach to event
-      artist['spotify'] = artistData.appendSpotifyData(artist_data)
-      artist['lastfm'] = artistData.appendLastfmData(artist_data)
-      # spotify = artistData.appendSpotifyData(artist_data)
+      spotify_data = artistData.appendSpotifyData(artist_data)
+      artist['spotify'] = spotify_data
 
-      # loop through Spotify artist data
-      # spotify_features = spotify['tracks']
+      # add artist features to an aggregate event array
+      if spotify_data:
+        for item in [spotify_data]:
+          spotify_followers.append(item['followers'])
+          spotify_popularity.append(item['popularity'])
+
+          spotify_genres.extend(item['genre'])
+          danceability.extend(item['features']['danceability'])
+          energy.extend(item['features']['energy'])
+          key.extend(item['features']['key'])
+          loudness.extend(item['features']['loudness'])
+          mode.extend(item['features']['mode'])
+          speechiness.extend(item['features']['speechiness'])
+          acousticness.extend(item['features']['acousticness'])
+          instrumentalness.extend(item['features']['instrumentalness'])
+          liveness.extend(item['features']['liveness'])
+          valence.extend(item['features']['valence'])
+          tempo.extend(item['features']['tempo'])
+          duration.extend(item['features']['duration_ms'])
+          time_signature.extend(item['features']['time_signature'])
+      else:
+        pass
+
+      # get last.fm data
+      lastfm_data = artistData.appendLastfmData(artist_data)
+      artist['lastfm'] = lastfm_data
+
+      if lastfm_data:
+        for item in [lastfm_data]:
+          lastfm_listeners.extend(item['listeners'])
+          lastfm_playcount.extend(item['playcount'])
+          lastfm_tags.extend(item['tags'])
+      else:
+        pass
+
+    # attach aggregate spotify data to event
+    event['spotify'] = {
+      'genres' : spotify_genres,
+      'popularity' : spotify_popularity,
+      'followers' : spotify_followers,
+      'danceability' : danceability,
+      'energy' : energy,
+      'key' : key,
+      'loudness' : loudness,
+      'mode' : mode,
+      'speechiness' : speechiness,
+      'acousticness' : acousticness,
+      'instrumentalness' : instrumentalness,
+      'liveness' : liveness,
+      'valence' : valence,
+      'tempo' : tempo,
+      'duration_ms' : duration,
+      'time_signature' : time_signature
+    }
+
+    # attach aggregate lastfm date to event
+    event['lastfm'] = {
+      'listeners' : lastfm_listeners,
+      'playcount' : lastfm_playcount,
+      'tags': lastfm_tags
+    }
+
+
 
 
 
