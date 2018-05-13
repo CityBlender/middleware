@@ -12,6 +12,11 @@ def getJson(url):
   # return JSON object
   return data
 
+def getResponse(url, params):
+  response = requests.get(url=url, params=params)
+  data = json.loads(response.text)
+  return data
+
 
 def dumpJson(filename, data, dump_dir):
 

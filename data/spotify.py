@@ -91,7 +91,7 @@ def getArtistInfo(artist):
       'image': artist['images']
     }
 
-    print(printHeader() + ' Got data for ' + printGreen(artist_object['name']))
+    # print(printHeader() + ' Got data for ' + printGreen(artist_object['name']))
 
 
   # return artist object
@@ -167,7 +167,7 @@ def getArtistTopTracks(artist):
 
 
     # print progress to console
-    print(printHeader() + ' Got top tracks for ' + printGreen(artist_name))
+    # print(printHeader() + ' Got top tracks for ' + printGreen(artist_name))
 
   # return
   return top_tracks_array

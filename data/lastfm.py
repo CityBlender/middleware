@@ -64,17 +64,17 @@ def getArtistInfo(artist_ref):
 
       # set empty object if no artist is found
       if 'error' in data:
-        print(printHeader() + ' Cannot find' + printGreen(artist_name) + ' using search. Returning empty object.')
+        # print(printHeader() + ' Cannot find' + printGreen(artist_name) + ' using search. Returning empty object.')
         data_return = {}
 
       # return a first search result
       else:
-        print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
+        # print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
         data_return = data
 
     # return data if found using mbid
     else:
-      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using mbid.')
+      # print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using mbid.')
       data_return = data
 
   ### search lookup
@@ -86,11 +86,11 @@ def getArtistInfo(artist_ref):
 
     # set empty object if no artist is found
     if 'error' in data:
-      print(printHeader() + ' Cannot find ' + printGreen(artist_name) + ' using search. Returning empty object.')
+      # print(printHeader() + ' Cannot find ' + printGreen(artist_name) + ' using search. Returning empty object.')
       data_return = {}
     # otherwise return search results
     else:
-      print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
+      # print(printHeader() + ' Got data for ' + printGreen(artist_name) + ' using search.')
       data_return = data
 
   # finally return the object
@@ -133,7 +133,7 @@ def getArtistTopTags(data):
     tags_reduced = tags[:10]
 
     top_tags_return = tags_reduced
-    print(printHeader() + ' Got top 10 tags for ' + printGreen(artist['name']))
+    # print(printHeader() + ' Got top 10 tags for ' + printGreen(artist['name']))
 
   # return top 10 tags
   return top_tags_return
@@ -196,7 +196,7 @@ def getArtistTopTracks(data):
       top_tracks_return.append(track_object)
 
   # return top 10 tracks
-  print(printHeader() + ' Got top 10 tracks for ' + printGreen(artist['name']))
+  # print(printHeader() + ' Got top 10 tracks for ' + printGreen(artist['name']))
   return top_tracks_return
 
 

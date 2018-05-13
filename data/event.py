@@ -7,6 +7,7 @@ import utils.dataHelper as dataHelper
 import data.songkick as sk
 import data.lastfm as lastfm
 import data.spotify as spotify
+import data.foursquare as fq
 import data.artist as artistData
 
 def fetchAll(area, events_collection, artist_collection, min_date = settings.today, max_date = settings.today):
@@ -130,6 +131,12 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
       'playcount' : lastfm_playcount,
       'tags': lastfm_tags
     }
+
+    # attach FourSquare venue info
+    venue = event['venue']
+
+    # get venue info
+    venue_data = fq.findVenue(venue)
 
 
 
