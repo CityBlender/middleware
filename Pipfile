@@ -16,6 +16,7 @@ pprint = "*"
 dnspython = "*"
 spotipy = "*"
 scipy = "*"
+python-dateutil = "*"
 
 [dev-packages]
 

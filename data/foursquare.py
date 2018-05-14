@@ -1,4 +1,3 @@
-import dateutil
 import json
 import os, errno
 import random
