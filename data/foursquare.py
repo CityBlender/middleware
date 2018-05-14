@@ -69,7 +69,6 @@ def findVenue(venue_input):
       query = name
     )
 
-  pprint(params)
   # get JSON response
   data = dataHelper.getResponse(url, params)
 
@@ -83,8 +82,6 @@ def findVenue(venue_input):
 def fetchVenueData(venue_input):
   # find venue first
   venue_data = findVenue(venue_input)
-
-  pprint(venue_data)
 
   if not venue_data['response']['venues']:
     data = {}
