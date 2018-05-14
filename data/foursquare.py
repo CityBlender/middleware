@@ -83,6 +83,8 @@ def fetchVenueData(venue_input):
   # find venue first
   venue_data = findVenue(venue_input)
 
+  pprint(venue_data)
+
   if not venue_data['response']['venues']:
     data = {}
     pass
@@ -156,11 +158,12 @@ def getVenueObject(venue_input):
       venue_object['description'] = venue['description']
 
     # get likes
-    if 'count' in venue['likes']:
-      venue_object['likes'] = venue['likes']['count']
+    if 'likes' in venue:
+      if 'count' in venue['likes']:
+        venue_object['likes'] = venue['likes']['count']
 
-    if 'summary' in venue['likes']:
-      venue_object['likes_summary'] = venue['likes']['summary']
+      if 'summary' in venue['likes']:
+        venue_object['likes_summary'] = venue['likes']['summary']
 
     # get photo
     if 'bestPhoto' in venue:
