@@ -80,6 +80,7 @@ def appendSpotifyData(artist_data):
       'followers': spotify['followers'],
       'genre': spotify['genre'],
       'image': spotify['image'],
+      'tracks': spotify['tracks'],
       'features': spotify['features']
     }
 
@@ -104,7 +105,9 @@ def appendLastfmData(artist_data):
       'url': lastfm['url'],
       'listeners': lastfm['listeners'],
       'playcount': lastfm['playcount'],
-      'image': lastfm['image']
+      'image': lastfm['image'],
+      'bio': lastfm['bio']['summary'],
+      'tracks': lastfm['tracks']
     }
 
     # loop through lastfm tags

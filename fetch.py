@@ -15,8 +15,17 @@ db_london = db.db_client.london
 db_london_events = db_london['events']
 db_london_artist = db_london['artists']
 
-# insert into database
-# db.dbInsertEvents(london_area, db_london_events)
+# set up indexes
+db.createEventIndex(db_london_events)
+db.createArtistIndex(db_london_artist)
 
-# event.getEventObject(london_area)
-event.fetchAll(london_area, db_london_events, db_london_artist)
+# fetch events
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today, settings.today)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.tomorrow, settings.tomorrow)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_2, settings.today_plus_2)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_3, settings.today_plus_3)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_4, settings.today_plus_4)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_5, settings.today_plus_5)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_6, settings.today_plus_6)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_7, settings.today_plus_7)
+

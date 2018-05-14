@@ -36,8 +36,8 @@ def printGreen(string):
 ###################
 def findVenue(venue_input):
   # get API call parameters
-  lng = venue_input['location']['x']
-  lat = venue_input['location']['y']
+  lng = venue_input['location']['lng']
+  lat = venue_input['location']['lat']
   ll = str(lat) + ',' + str(lng)
 
   name = venue_input['name']
@@ -72,25 +72,29 @@ def fetchVenueData(venue_input):
   # find venue first
   venue_data = findVenue(venue_input)
 
-  # get venue id
-  venue_id = venue_data['response']['venues'][0]['id']
+  if not venue_data['response']['venues']:
+    data = {}
+    pass
+  else:
+    # get venue id
+    venue_id = venue_data['response']['venues'][0]['id']
 
-  # get API parameters
-  client = getFqClient()
-  client_id = client[0]
-  client_secret = client[1]
+    # get API parameters
+    client = getFqClient()
+    client_id = client[0]
+    client_secret = client[1]
 
-  url = 'https://api.foursquare.com/v2/venues/' + venue_id
+    url = 'https://api.foursquare.com/v2/venues/' + venue_id
 
-  # set parameters for API call
-  params = dict(
-    client_id=client_id,
-    client_secret=client_secret,
-    v=foursquare_api_version
-  )
+    # set parameters for API call
+    params = dict(
+      client_id=client_id,
+      client_secret=client_secret,
+      v=foursquare_api_version
+    )
 
-  # get JSON response
-  data = dataHelper.getResponse(url, params)
+    # get JSON response
+    data = dataHelper.getResponse(url, params)
 
   # return data
   return data
@@ -103,105 +107,110 @@ def getVenueObject(venue_input):
   # get JSON response
   venue_source = fetchVenueData(venue_input)
 
-  # get venue data
-  venue = venue_source['response']['venue']
+  if not venue_source:
+    venue_object = {}
+    pass
+  else:
 
-  # construct basic venue object
-  venue_object = {
-    'id': venue['id'],
-    'name': venue['name'],
-    'fq_url': venue['shortUrl']
-  }
+    # get venue data
+    venue = venue_source['response']['venue']
 
-  if 'location' in venue:
-    location_object = {}
-    if 'address' in venue['location']:
-      location_object['address'] = venue['location']['address']
-    if 'postalCode' in venue['location']:
-      location_object['zip'] = venue['location']['postalCode']
-    if 'city' in venue['location']:
-      location_object['city'] = venue['location']['city']
-    venue_object['location'] = location_object
-
-  # get price
-  if 'price' in venue:
-    venue_object['price'] = {
-      'tier': venue['price']['tier'],
-      'message': venue['price']['message'],
-      'currency': venue['price']['currency']
+    # construct basic venue object
+    venue_object = {
+      'id': venue['id'],
+      'name': venue['name'],
+      'fq_url': venue['shortUrl']
     }
 
-  # get description
-  if 'description' in venue:
-    venue_object['description'] = venue['description']
+    if 'location' in venue:
+      location_object = {}
+      if 'address' in venue['location']:
+        location_object['address'] = venue['location']['address']
+      if 'postalCode' in venue['location']:
+        location_object['zip'] = venue['location']['postalCode']
+      if 'city' in venue['location']:
+        location_object['city'] = venue['location']['city']
+      venue_object['location'] = location_object
 
-  # get likes
-  if 'count' in venue['likes']:
-    venue_object['likes'] = venue['likes']['count']
+    # get price
+    if 'price' in venue:
+      venue_object['price'] = {
+        'tier': venue['price']['tier'],
+        'message': venue['price']['message'],
+        'currency': venue['price']['currency']
+      }
 
-  if 'summary' in venue['likes']:
-    venue_object['likes_summary'] = venue['likes']['summary']
+    # get description
+    if 'description' in venue:
+      venue_object['description'] = venue['description']
 
-  # get photo
-  if 'bestPhoto' in venue:
-    photo_object = {
-      'prefix': venue['bestPhoto']['prefix'],
-      'suffix': venue['bestPhoto']['suffix']
-    }
-    venue_object['photo'] = photo_object
+    # get likes
+    if 'count' in venue['likes']:
+      venue_object['likes'] = venue['likes']['count']
 
-  # get contact info
-  if 'contact' in venue:
-    contact = venue['contact']
-    contact_object = {}
-    if 'phone' in contact:
-      contact_object['phone'] = contact['phone']
-    if 'twitter' in contact:
-      contact_object['twitter'] = contact['twitter']
-    if 'instagram' in contact:
-      contact_object['instagram'] = contact['instagram']
-    if 'facebook' in contact:
-      contact_object['facebook'] = contact['facebook']
-    if 'facebookUsername' in contact:
-      contact_object['facebook_username'] = contact['facebookUsername']
-    if 'facebookName' in contact:
-      contact_object['facebook_name'] = contact['facebookName']
+    if 'summary' in venue['likes']:
+      venue_object['likes_summary'] = venue['likes']['summary']
 
-    # append final contact object
-    venue_object['contact'] = contact_object
+    # get photo
+    if 'bestPhoto' in venue:
+      photo_object = {
+        'prefix': venue['bestPhoto']['prefix'],
+        'suffix': venue['bestPhoto']['suffix']
+      }
+      venue_object['photo'] = photo_object
 
-  # get url
-  if 'url' in venue:
-    venue_object['contact']['url'] = venue['url']
+    # get contact info
+    if 'contact' in venue:
+      contact = venue['contact']
+      contact_object = {}
+      if 'phone' in contact:
+        contact_object['phone'] = contact['phone']
+      if 'twitter' in contact:
+        contact_object['twitter'] = contact['twitter']
+      if 'instagram' in contact:
+        contact_object['instagram'] = contact['instagram']
+      if 'facebook' in contact:
+        contact_object['facebook'] = contact['facebook']
+      if 'facebookUsername' in contact:
+        contact_object['facebook_username'] = contact['facebookUsername']
+      if 'facebookName' in contact:
+        contact_object['facebook_name'] = contact['facebookName']
 
-  # get rating
-  if 'rating' in venue:
-    venue_object['rating'] = venue['rating']
-    venue_object['rating_color'] = venue['ratingColor']
+      # append final contact object
+      venue_object['contact'] = contact_object
 
-  # get tips
-  if 'tips' in venue:
-    tips = venue['tips']['groups'][0]['items']
-    tips_array = []
+    # get url
+    if 'url' in venue:
+      venue_object['contact']['url'] = venue['url']
 
-    for tip in tips:
-      tip_object = {
-        'text': tip['text'],
-        'url': tip['canonicalUrl'],
-        'user': {
-          'first_name': tip['user']['firstName'],
-          'photo': {
-            'prefix': tip['user']['photo']['prefix'],
-            'suffix': tip['user']['photo']['suffix']
+    # get rating
+    if 'rating' in venue:
+      venue_object['rating'] = venue['rating']
+      venue_object['rating_color'] = venue['ratingColor']
+
+    # get tips
+    if 'tips' in venue:
+      tips = venue['tips']['groups'][0]['items']
+      tips_array = []
+
+      for tip in tips:
+        tip_object = {
+          'text': tip['text'],
+          'url': tip['canonicalUrl'],
+          'user': {
+            'first_name': tip['user']['firstName'],
+            'photo': {
+              'prefix': tip['user']['photo']['prefix'],
+              'suffix': tip['user']['photo']['suffix']
+            }
           }
         }
-      }
-      tips_array.append(tip_object)
+        tips_array.append(tip_object)
 
-    # attach tips array to venue
-    venue_object['tips'] = tips_array
+      # attach tips array to venue
+      venue_object['tips'] = tips_array
 
-  # return complete object
-  print(printHeader() + ' Retuning an object for ' + printGreen(venue_object['name']))
+      # return complete object
+      print(printHeader() + ' Retuning an object for ' + printGreen(venue_object['name']))
 
   return venue_object

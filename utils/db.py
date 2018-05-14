@@ -1,4 +1,5 @@
 import os, errno
+import pymongo
 from pymongo import MongoClient
 from pprint import pprint
 
@@ -44,25 +45,30 @@ def eventExists(new_event_id, db_collection):
   else:
     return False
 
+# set event index
+def createEventIndex(db_collection):
+  db_collection.create_index([('date', pymongo.DESCENDING)], background=True)
+  db_collection.create_index([('id', pymongo.ASCENDING)], background=True)
+
+
 # insert events into database
-def dbInsertEvents(event_data, db_collection):
-  events = event_data
-  events_inserted = 0
-  events_skipped = 0
-  for event in events:
-    event_id = event['id']
-    if eventExists(event_id, db_collection):
-      events_skipped = events_skipped + 1
-      pass
-    else:
-      events_inserted = events_inserted + 1
-      db_collection.insert(event)
+def dbInsertEvent(event_data, db_collection):
+  event = event_data
+  event_id = event['id']
+  event_name = event['name']
+  if eventExists(event_id, db_collection):
+    print_skip = printHeader() + ' Skipping ' + printUnderline('event') + ' ' + printGreen(event_name) + ' (already exits)'
+    print(print_skip)
+    pass
+  else:
+    db_collection.insert(event)
+    print_insert = printHeader() + ' Inserted  ' + printUnderline('event') + ' ' + printGreen(event_name)
+    print(print_insert)
 
-  print_insert = printUnderline(printHeader() + ' Inserted ' + printGreen(str(events_inserted)) + ' events')
-  print_skip = printUnderline(printHeader() + ' Skipped ' + printGreen(str(events_skipped)) + ' duplicate events')
-  print(print_insert)
-  print(print_skip)
 
+# create artist index
+def createArtistIndex(db_collection):
+  db_collection.create_index([('id', pymongo.ASCENDING)], background=True)
 
 # check if artist exists
 def artistExists(new_artist_id, db_collection):
@@ -76,10 +82,12 @@ def dbInsertArtist(artist_data, db_collection):
   artist_id = artist_data['id']
   artist_name = artist_data['name']
   if artistExists(artist_id, db_collection):
+    print_skip = printHeader() + ' Skipping ' + printUnderline('artist') + ' ' + printGreen(artist_name) + ' (already exits)'
+    print(print_skip)
     pass
   else:
     db_collection.insert(artist_data)
-    print_console = printUnderline(printHeader() + ' Inserted ' + printGreen(artist_name))
+    print_console = printHeader() + ' Inserted ' + printUnderline('artist') + ' ' + printGreen(artist_name)
     print(print_console)
 
 

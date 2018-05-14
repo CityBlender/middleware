@@ -24,6 +24,14 @@ def getSongkickKey():
   key = random.choice (songkick_keys)
   return key
 
+# print console header
+def printHeader():
+  return dataHelper.printHeader('SongKick:')
+
+# print green
+def printGreen(string):
+  return dataHelper.printGreen(string)
+
 
 #
 # getGigs() - generic function for returning raw SongKick JSON based on input parameters
@@ -127,7 +135,7 @@ def getEventsObject(data):
     event_datetime_string = event['start']['datetime']
     if event_datetime_string is not None:
       event_datetime = dateutil.parser.parse(event_datetime_string)
-      event_datetime = str(event_datetime)
+      # event_datetime = str(event_datetime)
     else:
       event_datetime = ''
 
@@ -202,7 +210,7 @@ def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.to
     events_list = events_list + getEventsObject(data)
 
   # return object with all events for given dates
-  print('\033[92m' + str(len(events_list)) + '\033[0m' + ' events fetched for ' + metro_area_code + ' on ' + min_date)
+  print(printHeader() + ' Fetched ' + printGreen(str(total_entries)) + ' entries for ' + metro_area_code + ' on ' + min_date)
 
   return events_list
 
