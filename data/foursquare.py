@@ -47,16 +47,29 @@ def findVenue(venue_input):
 
   url = 'https://api.foursquare.com/v2/venues/search'
 
-  # define parameters for API call
-  params = dict(
-    client_id=client_id,
-    client_secret=client_secret,
-    v=foursquare_api_version,
-    ll = ll,
-    intent = 'match',
-    name = name
-  )
+  if lng:
+    # define parameters for API call
+    params = dict(
+      client_id=client_id,
+      client_secret=client_secret,
+      v=foursquare_api_version,
+      ll = ll,
+      intent = 'match',
+      query = name
+    )
+  else:
+    # define parameters for API call if there is no exact location
+    params = dict(
+      client_id=client_id,
+      client_secret=client_secret,
+      v=foursquare_api_version,
+      intent = 'browse',
+      near = 'London, GB',
+      radius = 100,
+      query = name
+    )
 
+  pprint(params)
   # get JSON response
   data = dataHelper.getResponse(url, params)
 
@@ -70,6 +83,8 @@ def findVenue(venue_input):
 def fetchVenueData(venue_input):
   # find venue first
   venue_data = findVenue(venue_input)
+
+  pprint(venue_data)
 
   if not venue_data['response']['venues']:
     data = {}
