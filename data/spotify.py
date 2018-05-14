@@ -11,7 +11,8 @@ import settings
 import utils.dataHelper as dataHelper
 
 spotify_credentials = [
-  [os.getenv('SPOTIFY_CLIENT_ID_1'), os.getenv('SPOTIFY_CLIENT_SECRET_1')]
+  [os.getenv('SPOTIFY_CLIENT_ID_1'), os.getenv('SPOTIFY_CLIENT_SECRET_1')],
+  [os.getenv('SPOTIFY_CLIENT_ID_2'), os.getenv('SPOTIFY_CLIENT_SECRET_2')]
 ]
 
 # print console header
@@ -105,7 +106,7 @@ def getArtistTopTracks(artist):
   # get artist information first
   artist = artist
   artist_id = artist['id']
-  artist_name = artist['name']
+  # artist_name = artist['name']
 
   if not artist_id:
     top_tracks_array = []

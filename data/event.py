@@ -1,4 +1,10 @@
 import os, errno
+from statistics import median
+from statistics import median_low
+from statistics import median_high
+from statistics import mean
+from statistics import pvariance
+from scipy import stats
 from pprint import pprint
 
 import settings as settings
@@ -68,7 +74,7 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
 
       # get a subset of Spotify data to attach to event
       spotify_data = artistData.appendSpotifyData(artist_data)
-      artist['spotify'] = spotify_data
+      artist_object['spotify'] = spotify_data
 
       # add artist features to an aggregate event array
       if spotify_data:
@@ -95,12 +101,13 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
 
       # get last.fm data
       lastfm_data = artistData.appendLastfmData(artist_data)
-      artist['lastfm'] = lastfm_data
+      artist_object['lastfm'] = lastfm_data
+
 
       if lastfm_data:
         for item in [lastfm_data]:
-          lastfm_listeners.extend(item['listeners'])
-          lastfm_playcount.extend(item['playcount'])
+          lastfm_listeners.append(item['listeners'])
+          lastfm_playcount.append(item['playcount'])
           lastfm_tags.extend(item['tags'])
       else:
         pass
@@ -109,26 +116,78 @@ def fetchAll(area, events_collection, artist_collection, min_date = settings.tod
     event['spotify'] = {
       'genres' : spotify_genres,
       'popularity' : spotify_popularity,
+      'popularity_median': median(spotify_popularity),
+      'popularity_min': min(spotify_popularity),
+      'popularity_max': max(spotify_popularity),
+      'popularity_pvariance': pvariance(spotify_popularity),
       'followers' : spotify_followers,
+      'followers_sum': sum(spotify_followers),
       'danceability' : danceability,
+      'danceability_median': median(danceability),
+      'danceability_min': min(danceability),
+      'danceability_max': max(danceability),
+      'danceability_pvariance': pvariance(danceability),
       'energy' : energy,
+      'energy_median': median(energy),
+      'energy_min': min(energy),
+      'energy_max': max(energy),
+      'enery_pvariance': pvariance(energy),
       'key' : key,
+      'key_mode': stats.mode(key)[0].tolist(),
+      'key_min': min(key),
+      'key_max': max(key),
       'loudness' : loudness,
+      'loudness_median': median(loudness),
+      'loudness_min': min(loudness),
+      'loudness_max': max(loudness),
+      'loudness_pvariance': pvariance(loudness),
       'mode' : mode,
+      'mode_mode': stats.mode(mode)[0].tolist(),
       'speechiness' : speechiness,
+      'speechiness_median': median(speechiness),
+      'speechines_min': min(speechiness),
+      'speechines_max': max(speechiness),
+      'speechines_pvariance': pvariance(speechiness),
       'acousticness' : acousticness,
+      'acousticness_median': median(acousticness),
+      'acousticness_min': min(acousticness),
+      'acousticness_max': max(acousticness),
+      'acousticness_pvariance': pvariance(acousticness),
       'instrumentalness' : instrumentalness,
+      'instrumentalness_median': median(instrumentalness),
+      'instrumentalness_min': min(instrumentalness),
+      'instrumentalness_max': max(instrumentalness),
+      'instrumentalness_pvariance': pvariance(instrumentalness),
       'liveness' : liveness,
+      'liveness_median': median(liveness),
+      'liveness_min': min(liveness),
+      'liveness_max': max(liveness),
+      'liveness_pvariance': pvariance(liveness),
       'valence' : valence,
+      'valence_median': median(valence),
+      'valence_min': min(valence),
+      'valence_max': max(valence),
+      'valence_pvariance': pvariance(valence),
       'tempo' : tempo,
+      'tempo_median': median(tempo),
+      'tempo_min': min(tempo),
+      'tempo_max': max(tempo),
+      'tempo_pvariance': pvariance(tempo),
       'duration_ms' : duration,
-      'time_signature' : time_signature
+      'duration_ms_mean': mean(duration),
+      'duration_ms_min': min(duration),
+      'duration_ms_max': max(duration),
+      'duration_ms_pvariance': pvariance(duration),
+      'time_signature' : time_signature,
+      'time_signature_mode': stats.mode(time_signature)[0].tolist()
     }
 
     # attach aggregate lastfm date to event
     event['lastfm'] = {
       'listeners' : lastfm_listeners,
+      'listeners_sum': sum(lastfm_listeners),
       'playcount' : lastfm_playcount,
+      'playcount_sum': sum(lastfm_playcount),
       'tags': lastfm_tags
     }
 

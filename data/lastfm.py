@@ -11,7 +11,8 @@ import utils.dropboxHelper as dropboxHelper
 
 # Last.fm API keys
 last_keys = ([
-  os.getenv('LAST_API_KEY_1')
+  os.getenv('LAST_API_KEY_1'),
+  os.getenv('LAST_API_KEY_2')
 ])
 
 # set URL base
@@ -180,8 +181,8 @@ def getArtistTopTracks(data):
     for track in tracks:
       track_object = {
         'name': track['name'],
-        'playcount': track['playcount'],
-        'listeners': track['listeners'],
+        'playcount': int(track['playcount']),
+        'listeners': int(track['listeners']),
         'url': track['url'],
         'rank': track['@attr']['rank']
       }
@@ -239,8 +240,8 @@ def getArtistObject(artist_ref):
       'name': artist['name'],
       'mbid': artist_mbid,
       'url': artist['url'],
-      'listeners': artist['stats']['listeners'],
-      'playcount': artist['stats']['playcount'],
+      'listeners': int(artist['stats']['listeners']),
+      'playcount': int(artist['stats']['playcount']),
       'image': artist_images,
       'bio': {
         'summary': artist['bio']['summary'],

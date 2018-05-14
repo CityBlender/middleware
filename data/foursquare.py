@@ -110,13 +110,18 @@ def getVenueObject(venue_input):
   venue_object = {
     'id': venue['id'],
     'name': venue['name'],
-    'fq_url': venue['shortUrl'],
-    'location': {
-      'address': venue['location']['address'],
-      'zip': venue['location']['postalCode'],
-      'city': venue['location']['city']
-    }
+    'fq_url': venue['shortUrl']
   }
+
+  if 'location' in venue:
+    location_object = {}
+    if 'address' in venue['location']:
+      location_object['address'] = venue['location']['address']
+    if 'postalCode' in venue['location']:
+      location_object['zip'] = venue['location']['postalCode']
+    if 'city' in venue['location']:
+      location_object['city'] = venue['location']['city']
+    venue_object['location'] = location_object
 
   # get price
   if 'price' in venue:

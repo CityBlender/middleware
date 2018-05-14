@@ -148,8 +148,8 @@ def getEventsObject(data):
 
       # location
       'location': {
-        'x': event['location']['lng'],
-        'y': event['location']['lat']
+        'lng': event['location']['lng'],
+        'lat': event['location']['lat']
       },
 
       # venue info
@@ -157,8 +157,8 @@ def getEventsObject(data):
         'id': event['venue']['id'],
         'name': event['venue']['displayName'],
         'location': {
-          'x': event['venue']['lng'],
-          'y': event['venue']['lat']
+          'lng': event['venue']['lng'],
+          'lat': event['venue']['lat']
         }
       },
 
