@@ -12,7 +12,9 @@ import utils.dataHelper as dataHelper
 
 spotify_credentials = [
   [os.getenv('SPOTIFY_CLIENT_ID_1'), os.getenv('SPOTIFY_CLIENT_SECRET_1')],
-  [os.getenv('SPOTIFY_CLIENT_ID_2'), os.getenv('SPOTIFY_CLIENT_SECRET_2')]
+  [os.getenv('SPOTIFY_CLIENT_ID_2'), os.getenv('SPOTIFY_CLIENT_SECRET_2')],
+  [os.getenv('SPOTIFY_CLIENT_ID_3'), os.getenv('SPOTIFY_CLIENT_SECRET_3')],
+  [os.getenv('SPOTIFY_CLIENT_ID_4'), os.getenv('SPOTIFY_CLIENT_SECRET_4')]
 ]
 
 # print console header

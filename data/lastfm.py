@@ -12,7 +12,9 @@ import utils.dropboxHelper as dropboxHelper
 # Last.fm API keys
 last_keys = ([
   os.getenv('LAST_API_KEY_1'),
-  os.getenv('LAST_API_KEY_2')
+  os.getenv('LAST_API_KEY_2'),
+  os.getenv('LAST_API_KEY_3'),
+  os.getenv('LAST_API_KEY_4')
 ])
 
 # set URL base

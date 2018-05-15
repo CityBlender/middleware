@@ -12,7 +12,9 @@ import utils.dropboxHelper as dropboxHelper
 # get random set of APP credentials
 foursquare_credentials = [
   [os.getenv('FQ_CLIENT_ID_1'), os.getenv('FQ_CLIENT_SECRET_1')],
-  [os.getenv('FQ_CLIENT_ID_2'), os.getenv('FQ_CLIENT_SECRET_2')]
+  [os.getenv('FQ_CLIENT_ID_2'), os.getenv('FQ_CLIENT_SECRET_2')],
+  [os.getenv('FQ_CLIENT_ID_3'), os.getenv('FQ_CLIENT_SECRET_3')],
+  [os.getenv('FQ_CLIENT_ID_4'), os.getenv('FQ_CLIENT_SECRET_4')]
 ]
 
 foursquare_api_version = '20180513'

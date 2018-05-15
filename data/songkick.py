@@ -6,7 +6,7 @@ import random
 import requests
 from pprint import pprint
 
-import settings
+import settings as settings
 import utils.dataHelper as dataHelper
 import utils.dropboxHelper as dropboxHelper
 
@@ -134,7 +134,7 @@ def getEventsObject(data):
     event_datetime_string = event['start']['datetime']
     if event_datetime_string is not None:
       event_datetime = dateutil.parser.parse(event_datetime_string)
-      # event_datetime = str(event_datetime)
+      event_datetime = str(event_datetime)
     else:
       event_datetime = ''
 
@@ -212,8 +212,6 @@ def fetchGigs(metro_area_code, min_date = settings.today, max_date = settings.to
   print(printHeader() + ' Fetched ' + printGreen(str(total_entries)) + ' entries for ' + metro_area_code + ' on ' + min_date)
 
   return events_list
-
-
 
 
 # functions put together
