@@ -31,6 +31,9 @@ today_plus_4 = (datetime.datetime.today() + datetime.timedelta(days=4)).strftime
 today_plus_5 = (datetime.datetime.today() + datetime.timedelta(days=5)).strftime(date_format)
 today_plus_6 = (datetime.datetime.today() + datetime.timedelta(days=6)).strftime(date_format)
 today_plus_7 = (datetime.datetime.today() + datetime.timedelta(days=7)).strftime(date_format)
+today_plus_8 = (datetime.datetime.today() + datetime.timedelta(days=8)).strftime(date_format)
+today_plus_9 = (datetime.datetime.today() + datetime.timedelta(days=9)).strftime(date_format)
+
 
 
 # SongKick metropolitan area codes

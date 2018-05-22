@@ -28,4 +28,7 @@ event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_p
 event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_5, settings.today_plus_5)
 event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_6, settings.today_plus_6)
 event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_7, settings.today_plus_7)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_8, settings.today_plus_8)
+event.fetchAll(london_area, db_london_events, db_london_artist, settings.today_plus_9, settings.today_plus_9)
+
 
